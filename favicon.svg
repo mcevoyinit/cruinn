@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <g fill="none" stroke="#2E5E4E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="60" cy="60" r="53"/>
+    <line x1="60" y1="34" x2="60" y2="40"/>
+    <line x1="38" y1="40" x2="82" y2="40"/>
+    <line x1="38" y1="40" x2="38" y2="47"/><line x1="82" y1="40" x2="82" y2="47"/>
+    <path d="M31 47 Q38 55 45 47"/><path d="M75 47 Q82 55 89 47"/>
+    <line x1="60" y1="40" x2="60" y2="56"/>
+    <line x1="60" y1="56" x2="47" y2="70"/><line x1="60" y1="56" x2="73" y2="70"/>
+    <line x1="47" y1="70" x2="40" y2="83"/><line x1="47" y1="70" x2="54" y2="83"/>
+    <line x1="73" y1="70" x2="66" y2="83"/><line x1="73" y1="70" x2="80" y2="83"/>
+  </g>
+  <g fill="#2E5E4E">
+    <circle cx="60" cy="34" r="3.2"/><circle cx="60" cy="56" r="3"/>
+    <circle cx="47" cy="70" r="2.6"/><circle cx="73" cy="70" r="2.6"/>
+    <circle cx="40" cy="83" r="2.2"/><circle cx="54" cy="83" r="2.2"/><circle cx="66" cy="83" r="2.2"/><circle cx="80" cy="83" r="2.2"/>
+  </g>
+</svg>
