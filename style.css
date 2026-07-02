@@ -595,10 +595,52 @@ a:focus-visible,
 .seal-meta code,
 .doc-cert-meta code { font-variant-numeric: tabular-nums; }
 
-/* Hang the closing full stop of the hero line into the margin. Safari only, a
-   no-op elsewhere, and safely inside the container padding so it cannot cause
-   overflow. */
-.hero h1 { hanging-punctuation: last; }
+/* ----- Hero headline: a quiet three-phrase cycle -----
+   One stable heading for assistive tech and crawlers is carried by the visually
+   hidden line (.vh, phrase 1); the three visible phrases are aria-hidden and
+   cross-fade. The base cascade shows phrase 1 only, so reduced-motion and any
+   context without CSS animation get a correct, static headline. Hanging
+   punctuation was dropped here: across overlapping stacked lines it is
+   unpredictable, and the headline is no longer a single phrase. */
+.vh {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+.hero-cycle { position: relative; }
+.hero-cycle .cycle { display: grid; }
+.hero-cycle .cycle-line {
+  grid-area: 1 / 1;          /* all phrases share one cell: reserves the tallest */
+  margin: 0;
+  opacity: 0;                /* base shows phrase 1 only */
+}
+.hero-cycle .cycle-line:first-child { opacity: 1; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-cycle .cycle-line { animation: phraseCycle 24s cubic-bezier(0.22, 1, 0.36, 1) infinite; }
+  .hero-cycle .cycle-line:nth-child(1) { animation-delay: 0s; }
+  .hero-cycle .cycle-line:nth-child(2) { animation-delay: -16s; }
+  .hero-cycle .cycle-line:nth-child(3) { animation-delay: -8s; }
+}
+
+/* 24s period, 8s per phrase: ~6.8s hold, then a staggered 1.2s crossfade in
+   which the outgoing phrase reaches 0 before the incoming one leaves 0, so two
+   phrases are never legibly stacked. Entry rises 8px; exit is a plain fade. */
+@keyframes phraseCycle {
+  0%     { opacity: 1; transform: translateY(0); }
+  28.33% { opacity: 1; transform: translateY(0); }
+  30.83% { opacity: 0; transform: translateY(0); }
+  31%    { opacity: 0; transform: translateY(8px); }
+  97.5%  { opacity: 0; transform: translateY(8px); }
+  100%   { opacity: 1; transform: translateY(0); }
+}
 
 /* Security-paper microprint: a hairline that is actually micro-set sha256 hex.
    Texture, not a headline. Non-selectable and hidden from assistive tech. */
