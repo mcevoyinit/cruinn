@@ -63,7 +63,7 @@ a:focus-visible,
 .btn:focus-visible,
 .brand:focus-visible {
   outline: 2px solid var(--green);
-  outline-offset: 3px;
+  outline-offset: 2px;
   border-radius: 4px;
 }
 
@@ -151,6 +151,7 @@ a:focus-visible,
   background: var(--surface);
 }
 .btn-ghost:hover { border-color: var(--green); color: var(--green); }
+.btn:active { transform: translateY(1px); }
 
 /* ----- Eyebrows and headings ----- */
 .eyebrow,
@@ -158,6 +159,7 @@ a:focus-visible,
   font-size: 0.76rem;
   text-transform: uppercase;
   letter-spacing: 0.15em;
+  word-spacing: 0.1em;
   font-weight: 600;
   color: var(--green);
   margin: 0 0 18px;
@@ -183,7 +185,7 @@ a:focus-visible,
   font-weight: 600;
   font-size: clamp(2.1rem, 4.8vw, 3.35rem);
   line-height: 1.1;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.018em;
   margin: 0 0 22px;
   max-width: 15ch;
   color: var(--ink);
@@ -341,7 +343,7 @@ a:focus-visible,
   font-weight: 600;
   font-size: clamp(1.65rem, 3vw, 2.3rem);
   line-height: 1.16;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.017em;
   margin: 0 0 16px;
   max-width: 22ch;
   color: var(--ink);
@@ -454,9 +456,9 @@ a:focus-visible,
   border-radius: var(--radius);
   padding: 24px 24px 22px;
   box-shadow: var(--shadow);
-  transition: transform 0.16s ease, box-shadow 0.16s ease;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
 }
-.trust-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+.trust-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); border-color: var(--green); }
 .trust-card h3 {
   margin: 0 0 9px;
   font-size: 1.06rem;
@@ -525,7 +527,13 @@ a:focus-visible,
 }
 .specimen-aside p { margin: 0 0 16px; color: var(--slate); }
 .specimen-link { font-weight: 500; }
-.specimen-link a { font-weight: 600; text-underline-offset: 3px; }
+.specimen-link a {
+  font-weight: 600;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: text-decoration-thickness 0.16s ease, text-underline-offset 0.16s ease;
+}
+.specimen-link a:hover { text-decoration-thickness: 2px; text-underline-offset: 4px; }
 .specimen-caveat { font-size: 0.82rem; color: var(--ink-faint); font-style: italic; margin: 0; }
 
 /* ----- Contact ----- */
@@ -564,12 +572,202 @@ a:focus-visible,
   .doc-hero { max-width: 100%; }
 }
 
-/* ----- Motion -----
-   Content is always visible at rest. We deliberately avoid any opacity based
-   entrance animation: it can leave the hero blank in a static render (crawlers,
-   link previews, no-JS contexts), which is unacceptable on a trust site.
-   Interaction is limited to gentle hover transitions declared above. */
+/* ===========================================================================
+   Craft layer, motion and micro-detail
+   ---------------------------------------------------------------------------
+   Devices drawn from the world of sealed evidence: an embosser press, a chain
+   of custody that draws itself, and security-paper microprint. Pure CSS, no JS.
+
+   Static-safety model. Content is fully visible in the base cascade. Every
+   entrance and reveal lives inside @media (prefers-reduced-motion: no-preference),
+   and every scroll-driven reveal additionally inside
+   @supports (animation-timeline: view()). So reduced-motion users, browsers with
+   no scroll-timeline support (Safari today), crawlers and link previews all get
+   the complete, legible page with nothing hidden. Motion is added only where it
+   is both welcomed and supported. This supersedes the earlier no-entrance-anim
+   note: the hazard was opacity set in the base cascade, which we never do. The
+   reveal rises with the independent translate property so hover transforms still
+   compose over a filled entrance.
+   =========================================================================== */
+
+/* Selection and tabular figures. */
+::selection { background: var(--green); color: #f6f6f2; }
+.seal-meta code,
+.doc-cert-meta code { font-variant-numeric: tabular-nums; }
+
+/* Hang the closing full stop of the hero line into the margin. Safari only, a
+   no-op elsewhere, and safely inside the container padding so it cannot cause
+   overflow. */
+.hero h1 { hanging-punctuation: last; }
+
+/* Security-paper microprint: a hairline that is actually micro-set sha256 hex.
+   Texture, not a headline. Non-selectable and hidden from assistive tech. */
+.microprint {
+  font-family: var(--mono);
+  font-size: 6.5px;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  opacity: 0.05;
+  white-space: nowrap;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+}
+.microprint-hero { margin-top: 44px; }
+.microprint-seal { margin: 2px 22px 0; padding-bottom: 14px; }
+
+/* The certificate seal turns a few degrees when its card is engaged. */
+.doc-specimen .seal-lg { transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1); }
+.doc-specimen:hover .seal-lg { transform: rotate(5deg); }
+
+/* ---- Keyframes ---- */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes settle {
+  from { opacity: 0; transform: translateY(16px) scale(0.985); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes reveal-rise {
+  from { opacity: 0; translate: 0 14px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+/* The embosser press: overshoot, a whisper of counter-rotation, a shadow bloom. */
+@keyframes stamp {
+  0%   { opacity: 0; transform: scale(1.12) rotate(1.6deg); box-shadow: 0 0 0 0 rgba(154, 107, 22, 0); }
+  55%  { opacity: 1; transform: scale(0.985) rotate(-0.4deg); box-shadow: 0 8px 20px 0 rgba(154, 107, 22, 0.30); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); box-shadow: 0 1px 2px 0 rgba(154, 107, 22, 0.10); }
+}
+@keyframes stamp-node {
+  0%   { opacity: 0; transform: scale(1.12) rotate(1.6deg); box-shadow: 0 0 0 0 rgba(46, 94, 78, 0); }
+  55%  { opacity: 1; transform: scale(0.97) rotate(-0.5deg); box-shadow: 0 10px 22px 0 rgba(46, 94, 78, 0.34); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); box-shadow: 0 4px 12px 0 rgba(46, 94, 78, 0.22); }
+}
+@keyframes resolve {
+  from { opacity: 0; transform: translateY(3px); filter: blur(2px); }
+  to   { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+@keyframes draw-line {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+@keyframes pop-node {
+  from { opacity: 0; transform: scale(0.6); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes breathe {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 3px rgba(46, 94, 78, 0.18); }
+  50%      { opacity: 0.6; box-shadow: 0 0 0 5px rgba(46, 94, 78, 0.07); }
+}
+
+/* ---- Motion, only when welcomed ---- */
+@media (prefers-reduced-motion: no-preference) {
+
+  /* The certification: the hero's orchestrated page-load moment, under 900ms.
+     The text column rises in quiet steps; the record card settles; its CERTIFIED
+     chip presses in like an embosser; the seal hash resolves beneath it. */
+  .hero-copy > * { animation: rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .hero-copy .eyebrow      { animation-delay: 0.04s; }
+  .hero-copy h1            { animation-delay: 0.12s; }
+  .hero-copy .lead         { animation-delay: 0.20s; }
+  .hero-copy .hero-actions { animation-delay: 0.28s; }
+
+  .hero-visual .doc       { animation: settle 0.48s cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: 0.30s; }
+  .hero-visual .hero-chip { animation: rise 0.36s cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: 0.56s; }
+  .doc-hero .doc-tag      { animation: stamp 0.28s ease-out both; animation-delay: 0.54s; }
+  .doc-hero .seal-meta code { animation: resolve 0.22s ease-out both; animation-delay: 0.64s; }
+
+  /* The "Verifies offline" status dot breathes like an LED. */
+  .chip-dot { animation: breathe 2.8s ease-in-out infinite; }
+
+  /* Scroll-driven reveals and the chain-of-custody draw. Guarded so any browser
+     without scroll timelines simply shows the finished, static page. */
+  @supports (animation-timeline: view()) {
+
+    .section-eyebrow,
+    .section h2,
+    .section-intro,
+    .trust-card,
+    .certs,
+    .doc-specimen,
+    .specimen-aside,
+    .stage h3,
+    .stage p,
+    .contact > * {
+      opacity: 0;
+      animation: reveal-rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+      animation-timeline: view();
+      animation-range: entry 6% entry 46%;
+    }
+
+    /* Section header trio rises as one composed unit on the shared default
+       range. The per-line micro-stagger was removed as the least-earning
+       effect: barely perceptible, and a title block rising together reads more
+       composed than three lines arriving in sequence. */
+
+    /* Trust cards cascade across each row. */
+    .trust-grid .trust-card:nth-child(1) { animation-range: entry 4%  entry 40%; }
+    .trust-grid .trust-card:nth-child(2) { animation-range: entry 8%  entry 44%; }
+    .trust-grid .trust-card:nth-child(3) { animation-range: entry 12% entry 48%; }
+    .trust-grid .trust-card:nth-child(4) { animation-range: entry 8%  entry 44%; }
+    .trust-grid .trust-card:nth-child(5) { animation-range: entry 12% entry 48%; }
+    .trust-grid .trust-card:nth-child(6) { animation-range: entry 16% entry 52%; }
+
+    /* Specimen: the document, then its aside. */
+    .doc-specimen   { animation-range: entry 6%  entry 42%; }
+    .specimen-aside { animation-range: entry 12% entry 48%; }
+
+    /* The evidence lifecycle draws itself: the connector line runs left to right
+       and the six nodes light in strict sequence. Desktop rail only; the stacked
+       mobile layout uses the gentler text reveal above. */
+    @media (min-width: 920px) {
+      .lifecycle .stage-node {
+        opacity: 0;
+        transform: scale(0.6);
+        animation: pop-node linear both;
+        animation-timeline: view();
+      }
+      .lifecycle .stage-line {
+        transform: scaleX(0);
+        transform-origin: left center;
+        animation: draw-line linear both;
+        animation-timeline: view();
+      }
+
+      .lifecycle .stage:nth-child(1) .stage-node { animation-range: entry 10% entry 22%; }
+      .lifecycle .stage:nth-child(1) .stage-line { animation-range: entry 16% entry 30%; }
+      .lifecycle .stage:nth-child(2) .stage-node { animation-range: entry 22% entry 34%; }
+      .lifecycle .stage:nth-child(2) .stage-line { animation-range: entry 28% entry 42%; }
+      .lifecycle .stage:nth-child(3) .stage-node { animation-range: entry 34% entry 46%; }
+      .lifecycle .stage:nth-child(3) .stage-line { animation-range: entry 40% entry 54%; }
+      .lifecycle .stage:nth-child(4) .stage-line { animation-range: entry 52% entry 66%; }
+      .lifecycle .stage:nth-child(5) .stage-node { animation-range: entry 64% entry 76%; }
+      .lifecycle .stage:nth-child(5) .stage-line { animation-range: entry 70% entry 84%; }
+      .lifecycle .stage:nth-child(6) .stage-node { animation-range: entry 76% entry 88%; }
+
+      /* Echo the embosser once: stage 4, the cryptographic seal, presses in. */
+      .lifecycle .stage:nth-child(4) .stage-node {
+        opacity: 0;
+        transform: scale(1.12);
+        animation: stamp-node linear both;
+        animation-timeline: view();
+        animation-range: entry 46% entry 62%;
+      }
+    }
+  }
+}
+
+/* ---- Reduced motion: everything static, nothing hidden ---- */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .trust-card { transition: none; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }
