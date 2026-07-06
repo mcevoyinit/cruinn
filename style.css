@@ -667,11 +667,9 @@ a:focus-visible,
   .problem-figure { min-height: 2.28em; }
 }
 .problem-note {
-  font-family: var(--mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.01em;
+  font-size: 0.82rem;
   color: var(--ink-faint);
-  margin: 0 0 15px;
+  margin: 0 0 14px;
 }
 .problem-detail {
   margin: 0;
@@ -703,12 +701,10 @@ a:focus-visible,
   border-color: var(--green);
 }
 .lane-card h3 {
-  font-family: var(--serif);
-  font-size: 1.24rem;
+  font-size: 1.12rem;
   font-weight: 600;
   color: var(--ink);
-  margin: 0 0 11px;
-  letter-spacing: -0.01em;
+  margin: 0 0 10px;
 }
 .lane-card p { margin: 0; color: var(--slate); font-size: 0.96rem; }
 
@@ -749,30 +745,13 @@ a:focus-visible,
 }
 @media (min-width: 540px) { .anno-list { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 900px) { .anno-list { grid-template-columns: repeat(4, 1fr); } }
-.seal-anno { display: grid; gap: 6px; }
-/* Desktop: a leader tick rises toward the specimen above. */
-.anno-leader {
-  position: relative;
-  width: 1px;
-  height: 18px;
-  margin-bottom: 8px;
-  background: linear-gradient(to top, transparent, var(--gold-line));
-}
-.anno-leader::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -2px;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--gold);
-}
-/* Below the two-column specimen the anatomy is a plain ruled four-row legend,
-   so the leader tick (which only points meaningfully on the wide layout) drops. */
-@media (max-width: 899px) {
-  .anno-leader { display: none; }
-  .seal-anno { border-top: 1px solid var(--line); padding-top: 13px; }
+/* Each part is a hairline-ruled cell: a legend keyed to the specimen above,
+   not a diagram with pins pointing at nothing. Reads the same wide or stacked. */
+.seal-anno {
+  display: grid;
+  gap: 6px;
+  border-top: 1px solid var(--line);
+  padding-top: 13px;
 }
 .anno-label {
   font-size: 0.7rem;
@@ -1137,8 +1116,7 @@ a:focus-visible,
   .skip-link,
   .site-nav,
   .microprint,
-  .faq-icon,
-  .anno-leader { display: none !important; }
+  .faq-icon { display: none !important; }
 
   /* Masthead: emblem and wordmark stay; the URL prints beside them. */
   .site-header {
