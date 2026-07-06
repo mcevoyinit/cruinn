@@ -550,17 +550,70 @@ a:focus-visible,
 .site-footer {
   border-top: 1px solid var(--line);
   background: var(--paper-alt);
-  padding: 30px 0;
+  padding: 52px 0 30px;
 }
-.footer-inner {
+.footer-top {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: 10px;
+  gap: 28px 40px;
+  padding-bottom: 26px;
+  border-bottom: 1px solid var(--line);
 }
-.footer-brand { font-family: var(--serif); font-weight: 600; font-size: 1.1rem; color: var(--ink); }
-.footer-meta { color: var(--ink-faint); font-size: 0.9rem; max-width: 60ch; }
+.footer-identity { max-width: 36ch; }
+.footer-brand-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  color: var(--green);
+  text-decoration: none;
+}
+.footer-wordmark {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 1.3rem;
+  color: var(--ink);
+  letter-spacing: 0.01em;
+}
+.footer-descriptor {
+  margin: 12px 0 0;
+  color: var(--slate);
+  font-size: 0.94rem;
+}
+.footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  align-items: center;
+}
+.footer-nav a {
+  color: var(--slate);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.footer-nav a:hover { color: var(--green); }
+.footer-base {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 32px;
+  padding-top: 22px;
+}
+.footer-standards {
+  margin: 0;
+  color: var(--ink-faint);
+  font-size: 0.85rem;
+  max-width: 64ch;
+}
+.footer-mark {
+  margin: 0;
+  color: var(--green-dark);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
 
 /* ----- Responsive ----- */
 @media (max-width: 720px) {
@@ -571,6 +624,212 @@ a:focus-visible,
   .section-intro { margin-bottom: 38px; }
   .doc-hero { max-width: 100%; }
 }
+
+/* ===========================================================================
+   Premium enhancement layer, new sections in the same hand
+   ---------------------------------------------------------------------------
+   Problem strip, audience lanes, annotated seal, questions and a fuller
+   footer. Built from the existing tokens, card language and eyebrow scale so
+   the page still reads as one document. Reveals for these are woven into the
+   scroll-reveal block below; nothing here sets opacity in the base cascade.
+   =========================================================================== */
+
+/* Anchored sections clear the sticky 66px header when jumped to. */
+.hero, .section { scroll-margin-top: 82px; }
+
+/* URL printed beside the wordmark; carries no weight on screen. */
+.brand-url { display: none; }
+
+/* ----- The problem: three quiet statements of institutional fact ----- */
+.problem-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+}
+@media (min-width: 720px) {
+  .problem-grid { grid-template-columns: repeat(3, 1fr); gap: 36px; }
+}
+.problem-stat {
+  border-top: 2px solid var(--green-line);
+  padding-top: 18px;
+}
+.problem-figure {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: clamp(1.35rem, 2.3vw, 1.7rem);
+  line-height: 1.14;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+  margin: 0 0 9px;
+}
+@media (min-width: 720px) {
+  /* Reserve two lines so the notes and details align across the three columns. */
+  .problem-figure { min-height: 2.28em; }
+}
+.problem-note {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.01em;
+  color: var(--ink-faint);
+  margin: 0 0 15px;
+}
+.problem-detail {
+  margin: 0;
+  color: var(--slate);
+  font-size: 0.96rem;
+}
+
+/* ----- Audience lanes: who relies on the sealed record ----- */
+.lane-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+@media (min-width: 880px) {
+  .lane-grid { grid-template-columns: repeat(3, 1fr); gap: 24px; }
+}
+.lane-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--green);
+  border-radius: var(--radius);
+  padding: 28px 26px 26px;
+  box-shadow: var(--shadow);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+.lane-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--green);
+}
+.lane-card h3 {
+  font-family: var(--serif);
+  font-size: 1.24rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 11px;
+  letter-spacing: -0.01em;
+}
+.lane-card p { margin: 0; color: var(--slate); font-size: 0.96rem; }
+
+/* ----- Annotated seal: a quiet anatomy legend beneath the specimen -----
+   The specimen card is untouched. On desktop the legend sits under the card
+   in the left grid track; on mobile it stacks directly below it as a plain
+   four-row legend. Leader ticks rise toward the certified block above. */
+@media (min-width: 900px) {
+  .specimen {
+    grid-template-areas:
+      "doc    aside"
+      "legend legend";
+    column-gap: 44px;
+    row-gap: 36px;
+  }
+  .doc-specimen { grid-area: doc; }
+  .specimen-aside { grid-area: aside; }
+  .seal-legend { grid-area: legend; }
+  /* A hairline seats the anatomy strip as one figure caption under the specimen. */
+  .seal-legend { border-top: 1px solid var(--line); padding-top: 26px; }
+}
+.seal-legend-cap {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  word-spacing: 0.1em;
+  font-weight: 600;
+  color: var(--green);
+  margin: 0 0 18px;
+}
+.anno-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px 26px;
+}
+@media (min-width: 540px) { .anno-list { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 900px) { .anno-list { grid-template-columns: repeat(4, 1fr); } }
+.seal-anno { display: grid; gap: 6px; }
+/* Desktop: a leader tick rises toward the specimen above. */
+.anno-leader {
+  position: relative;
+  width: 1px;
+  height: 18px;
+  margin-bottom: 8px;
+  background: linear-gradient(to top, transparent, var(--gold-line));
+}
+.anno-leader::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -2px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+/* Below the two-column specimen the anatomy is a plain ruled four-row legend,
+   so the leader tick (which only points meaningfully on the wide layout) drops. */
+@media (max-width: 899px) {
+  .anno-leader { display: none; }
+  .seal-anno { border-top: 1px solid var(--line); padding-top: 13px; }
+}
+.anno-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  color: var(--green-dark);
+}
+.anno-desc {
+  font-size: 0.86rem;
+  line-height: 1.4;
+  color: var(--slate);
+}
+
+/* ----- Common questions: native disclosure, styled to the brand ----- */
+.faq {
+  max-width: 820px;
+  border-top: 1px solid var(--line);
+}
+.faq-item { border-bottom: 1px solid var(--line); }
+.faq-item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 22px 6px;
+  cursor: pointer;
+  list-style: none;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::marker { content: ""; }
+.faq-item summary:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+.faq-q {
+  font-size: 1.06rem;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.4;
+}
+.faq-item summary:hover .faq-q { color: var(--green); }
+.faq-icon {
+  flex: none;
+  width: 11px;
+  height: 11px;
+  margin-right: 5px;
+  border-right: 2px solid var(--green);
+  border-bottom: 2px solid var(--green);
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.faq-item[open] .faq-icon { transform: translateY(2px) rotate(-135deg); }
+.faq-item summary:hover .faq-icon { border-color: var(--green-dark); }
+.faq-a { padding: 0 6px 26px; }
+.faq-a p { margin: 0; color: var(--slate); font-size: 1rem; max-width: 66ch; }
 
 /* ===========================================================================
    Craft layer, motion and micro-detail
@@ -733,10 +992,15 @@ a:focus-visible,
     .section-eyebrow,
     .section h2,
     .section-intro,
+    .problem-stat,
+    .lane-card,
     .trust-card,
     .certs,
     .doc-specimen,
     .specimen-aside,
+    .seal-legend-cap,
+    .seal-anno,
+    .faq-item,
     .stage h3,
     .stage p,
     .contact > * {
@@ -758,6 +1022,27 @@ a:focus-visible,
     .trust-grid .trust-card:nth-child(4) { animation-range: entry 8%  entry 44%; }
     .trust-grid .trust-card:nth-child(5) { animation-range: entry 12% entry 48%; }
     .trust-grid .trust-card:nth-child(6) { animation-range: entry 16% entry 52%; }
+
+    /* Problem statements and audience lanes cascade like the trust row. */
+    .problem-grid .problem-stat:nth-child(1) { animation-range: entry 4%  entry 40%; }
+    .problem-grid .problem-stat:nth-child(2) { animation-range: entry 8%  entry 44%; }
+    .problem-grid .problem-stat:nth-child(3) { animation-range: entry 12% entry 48%; }
+    .lane-grid .lane-card:nth-child(1) { animation-range: entry 4%  entry 40%; }
+    .lane-grid .lane-card:nth-child(2) { animation-range: entry 8%  entry 44%; }
+    .lane-grid .lane-card:nth-child(3) { animation-range: entry 12% entry 48%; }
+
+    /* Seal anatomy labels light left to right, echoing the lifecycle rail. */
+    .anno-list .seal-anno:nth-child(1) { animation-range: entry 4%  entry 36%; }
+    .anno-list .seal-anno:nth-child(2) { animation-range: entry 7%  entry 39%; }
+    .anno-list .seal-anno:nth-child(3) { animation-range: entry 10% entry 42%; }
+    .anno-list .seal-anno:nth-child(4) { animation-range: entry 13% entry 45%; }
+
+    /* Questions arrive one after another. */
+    .faq .faq-item:nth-child(1) { animation-range: entry 4%  entry 34%; }
+    .faq .faq-item:nth-child(2) { animation-range: entry 8%  entry 38%; }
+    .faq .faq-item:nth-child(3) { animation-range: entry 12% entry 42%; }
+    .faq .faq-item:nth-child(4) { animation-range: entry 16% entry 46%; }
+    .faq .faq-item:nth-child(5) { animation-range: entry 20% entry 50%; }
 
     /* Specimen: the document, then its aside. */
     .doc-specimen   { animation-range: entry 6%  entry 42%; }
