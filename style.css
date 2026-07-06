@@ -1098,3 +1098,117 @@ a:focus-visible,
     transition-duration: 0.001ms !important;
   }
 }
+
+/* ===========================================================================
+   Print: the subject's product is court paper, so the page prints like one.
+   ---------------------------------------------------------------------------
+   A clean monochrome document: no chrome, no motion, no security texture. The
+   masthead keeps the emblem, wordmark and the site URL; the lifecycle prints
+   as its six static steps; every question is forced open; sections break
+   sensibly. Colour is not relied upon, so it prints the same on any printer.
+   =========================================================================== */
+@media print {
+  @page { margin: 16mm; }
+
+  /* Neutralise motion and the scroll-reveal opacity so nothing prints hidden. */
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    translate: none !important;
+    box-shadow: none !important;
+  }
+
+  html { scroll-behavior: auto; }
+  body {
+    background: #fff;
+    color: var(--ink);
+    border-top: none;
+    font-size: 11pt;
+    line-height: 1.5;
+  }
+
+  /* Hide interactive and purely decorative furniture. */
+  .hero-actions,
+  .hero-visual,
+  .hero-chip,
+  .hv-glow,
+  .skip-link,
+  .site-nav,
+  .microprint,
+  .faq-icon,
+  .anno-leader { display: none !important; }
+
+  /* Masthead: emblem and wordmark stay; the URL prints beside them. */
+  .site-header {
+    position: static;
+    background: none;
+    backdrop-filter: none;
+    border-bottom: 1px solid var(--line);
+  }
+  .brand-url {
+    display: inline;
+    margin-left: 12px;
+    font-family: var(--mono);
+    font-size: 8.5pt;
+    color: var(--slate);
+  }
+
+  /* Print one clean headline, not the stacked cross-fade phrases. */
+  .hero-cycle .cycle { display: none; }
+  .hero-cycle .vh {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    clip: auto;
+    clip-path: none;
+    overflow: visible;
+    white-space: normal;
+  }
+
+  /* Flatten fills; keep hairlines as document rules. */
+  .hero { background: none; border-bottom: 1px solid var(--line); padding: 22px 0 20px; }
+  .section { background: none; padding: 22px 0; }
+  .section-alt { background: none; border-block: none; border-top: 1px solid var(--line); }
+  .doc, .trust-card, .lane-card, .certs,
+  .doc-seal, .doc-cert { background: none; border: 1px solid var(--line); }
+  .doc-tag, .badge { background: none; border: 1px solid var(--gold); color: var(--gold); }
+
+  /* Nodes print as outlined circles so the numbers survive a mono printer. */
+  .stage-node, .stage-node-seal {
+    background: none !important;
+    color: var(--ink) !important;
+    border: 1.5px solid var(--green);
+  }
+  .stage-node-seal { border-color: var(--gold); }
+
+  /* The evidence lifecycle prints as six stacked static steps. */
+  .lifecycle { display: block; }
+  .stage { position: relative; padding: 0 0 14px 60px; }
+  .stage-top { position: absolute; left: 0; top: 0; height: auto; margin: 0; display: block; }
+  .stage-line { display: none; }
+  .stage h3, .stage p { padding-right: 0; min-height: 0; }
+
+  /* Force every answer open on the printed page. The modern engine hides a
+     closed disclosure through the ::details-content pseudo, so reveal both. */
+  .faq-a { display: block !important; }
+  .faq-item::details-content { content-visibility: visible !important; }
+  .faq-item summary { padding: 14px 0 6px; }
+
+  /* Keep headings with their content and never split a small unit; let the
+     larger sections flow, so no page is left mostly blank. */
+  h1, h2, h3, .section-eyebrow, .seal-legend-cap { break-after: avoid; }
+  .problem-stat, .stage, .trust-card, .lane-card, .certs,
+  .doc-specimen, .seal-anno, .faq-item { break-inside: avoid; }
+
+  /* Links read as plain text; the specimen link keeps its filename. */
+  a { color: var(--ink); text-decoration: none; }
+  .contact-email a { text-decoration: underline; }
+  .specimen-link a { text-decoration: underline; }
+  .specimen-link a::after { content: " (sample-certified-transcript.pdf)"; font-family: var(--mono); font-size: 8pt; color: var(--slate); }
+
+  .footer-nav { display: none; }
+  .site-footer { padding: 20px 0; background: none; border-top: 1px solid var(--line); }
+}
