@@ -62,11 +62,14 @@
           </g>
         </svg>
         <span class="brand-name">Cruinn</span>
+        <span class="brand-url" aria-hidden="true">https://mcevoyinit.github.io/cruinn/</span>
       </a>
       <nav class="site-nav" aria-label="Primary">
+        <a href="#problem">Problem</a>
         <a href="#process">How it works</a>
         <a href="#trust">Trust</a>
         <a href="#proof">Output</a>
+        <a href="#questions">Questions</a>
         <a href="#contact" class="nav-cta">Contact</a>
       </nav>
     </div>
@@ -143,6 +146,49 @@
       </div>
       <div class="container">
         <div class="microprint microprint-hero" aria-hidden="true">54855ed523f32dfe28f2f637401583fc64e1c54564218aaf4b89545cce77e09aa8dccd1fe66228712142219d14a0a7573b56d9a78b3533f34edbfebd5d2fcda46bcf241d28fdb8f685858bc00cb783c35fb1a3b0c322709ac431d7822b783f2bc19eb9ee55fca994b0d6660c88249d721d92de739283efb2c42dadd474bad802509292caff85be24f4f37c474bcba7dd9d8ff1bb99fac05aecef271478a65a4c71dcbbb958fc23f428d72668dabda209f09e8509c0da38b587822ad825940d948da32de31a3007bbdc1c43177781826b94bfcd5f87081c89e0dbb8d5bda5b124</div>
+      </div>
+    </section>
+
+    <!-- The problem: a recording is not a usable record -->
+    <section id="problem" class="section section-alt" aria-labelledby="problem-title">
+      <div class="container">
+        <p class="section-eyebrow">The problem</p>
+        <h2 id="problem-title">A recording is not a usable record.</h2>
+        <p class="section-intro">
+          An interview is captured, and there the recording stops. Turning it
+          into a record that holds up to disclosure and to a court is a separate
+          problem, and for most interviews it goes unsolved.
+        </p>
+
+        <div class="problem-grid">
+          <div class="problem-stat">
+            <p class="problem-figure">Recorded by law</p>
+            <p class="problem-note">Criminal Justice Act 1984 regulations, SI 74/1997</p>
+            <p class="problem-detail">
+              Custody interviews have been recorded for decades. Turning those
+              recordings into a written record a case can rely on is still the
+              exception, not the rule.
+            </p>
+          </div>
+          <div class="problem-stat">
+            <p class="problem-figure">Hundreds of euro</p>
+            <p class="problem-note">per interview, and days of waiting</p>
+            <p class="problem-detail">
+              Commissioning a transcript of a single interview is expensive and
+              slow. Cost and delay are why so many recordings are never
+              transcribed at all.
+            </p>
+          </div>
+          <div class="problem-stat">
+            <p class="problem-figure">No proof it is unaltered</p>
+            <p class="problem-note">in an ordinary transcript</p>
+            <p class="problem-detail">
+              A plain document shows the words but not their integrity. Nothing
+              in it demonstrates that a line was not quietly changed after the
+              fact.
+            </p>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -269,6 +315,47 @@
       </div>
     </section>
 
+    <!-- Who it serves -->
+    <section id="who" class="section" aria-labelledby="who-title">
+      <div class="container">
+        <p class="section-eyebrow">Who it serves</p>
+        <h2 id="who-title">Made for every side of the record</h2>
+        <p class="section-intro">
+          Investigators, prosecutors, defence and the court are not asking for
+          different transcripts. They are asking for the same one, and for
+          confidence that it is unchanged no matter whose hands it is in.
+        </p>
+
+        <div class="lane-grid">
+          <article class="lane-card">
+            <h3>For investigations</h3>
+            <p>
+              An interview becomes a record ready for disclosure, with the chain
+              of custody intact. Every transcript is hashed at intake and sealed
+              on delivery, so the record that leaves an investigation is provably
+              the record that was made.
+            </p>
+          </article>
+          <article class="lane-card">
+            <h3>For prosecution and defence</h3>
+            <p>
+              Both sides verify the same sealed record independently and offline,
+              without relying on the other's copy or on ours. Agreement can start
+              from a shared, checkable fact rather than a document taken on trust.
+            </p>
+          </article>
+          <article class="lane-card">
+            <h3>For courts and tribunals</h3>
+            <p>
+              A certified transcript whose integrity does not rest on anyone's
+              word. The seal can be checked in the room, and any alteration to a
+              sealed record is evident to whoever checks it.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <!-- The output: certified transcript specimen -->
     <section id="proof" class="section" aria-labelledby="proof-title">
       <div class="container">
@@ -324,6 +411,32 @@
             <div class="microprint microprint-seal" aria-hidden="true">54855ed523f32dfe28f2f637401583fc64e1c54564218aaf4b89545cce77e09aa8dccd1fe66228712142219d14a0a7573b56d9a78b3533f34edbfebd5d2fcda46bcf241d28fdb8f685858bc00cb783c35fb1a3b0c322709ac431d7822b783f2bc19eb9ee55fca994b0d6660c88249d721d92de739283efb2c42dadd474bad802509292caff85be24f4f37c474bcba7dd9d8ff1bb99fac05aecef271478a65a4c71dcbbb958fc23f428d72668dabda209f09e8509c0da38b587822ad825940d948da32de31a3007bbdc1c43177781826b94bfcd5f87081c89e0dbb8d5bda5b124</div>
           </div>
 
+          <div class="seal-legend">
+            <p class="seal-legend-cap">Anatomy of the seal</p>
+            <ul class="anno-list">
+              <li class="seal-anno">
+                <span class="anno-leader" aria-hidden="true"></span>
+                <span class="anno-label">Content hash</span>
+                <span class="anno-desc">Binds every character of the transcript</span>
+              </li>
+              <li class="seal-anno">
+                <span class="anno-leader" aria-hidden="true"></span>
+                <span class="anno-label">Merkle root</span>
+                <span class="anno-desc">Any later change breaks the seal</span>
+              </li>
+              <li class="seal-anno">
+                <span class="anno-leader" aria-hidden="true"></span>
+                <span class="anno-label">Reviewer certification</span>
+                <span class="anno-desc">A vetted human checked and signed this</span>
+              </li>
+              <li class="seal-anno">
+                <span class="anno-leader" aria-hidden="true"></span>
+                <span class="anno-label">Audit line</span>
+                <span class="anno-desc">An append only history, not rewritable</span>
+              </li>
+            </ul>
+          </div>
+
           <div class="specimen-aside">
             <h3>Delivered as a sealed document</h3>
             <p>
@@ -337,6 +450,88 @@
             </p>
             <p class="specimen-caveat">Illustrative specimen. Not a real interview.</p>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Common questions -->
+    <section id="questions" class="section section-alt" aria-labelledby="questions-title">
+      <div class="container">
+        <p class="section-eyebrow">Common questions</p>
+        <h2 id="questions-title">Questions, answered plainly</h2>
+        <div class="faq">
+          <details class="faq-item" open>
+            <summary>
+              <span class="faq-q">Where is the data processed and stored?</span>
+              <span class="faq-icon" aria-hidden="true"></span>
+            </summary>
+            <div class="faq-a">
+              <p>
+                Within Ireland, always. Recordings and transcripts are processed
+                and stored on infrastructure under Irish jurisdiction. No
+                interview audio is sent to an external AI service or a third
+                party cloud.
+              </p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>
+              <span class="faq-q">Does AI decide what the record says?</span>
+              <span class="faq-icon" aria-hidden="true"></span>
+            </summary>
+            <div class="faq-a">
+              <p>
+                No. A sovereign model on our own infrastructure produces a fast
+                first draft, but it certifies nothing. A vetted reviewer checks
+                and certifies every line against the audio, so the certified text
+                is the reviewer's judgement, not the machine's.
+              </p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>
+              <span class="faq-q">What happens if a transcript is altered later?</span>
+              <span class="faq-icon" aria-hidden="true"></span>
+            </summary>
+            <div class="faq-a">
+              <p>
+                The seal stops verifying. Alter a single character of a sealed
+                transcript and its cryptographic seal no longer matches, so the
+                change is evident to anyone who checks, whoever made it.
+              </p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>
+              <span class="faq-q">Can the seal be verified without Cruinn?</span>
+              <span class="faq-icon" aria-hidden="true"></span>
+            </summary>
+            <div class="faq-a">
+              <p>
+                Yes, independently and offline. Verification checks the certified
+                text against its sealed manifest using published methods, so it
+                does not depend on contacting us or on us remaining in business.
+              </p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>
+              <span class="faq-q">How does this fit disclosure obligations?</span>
+              <span class="faq-icon" aria-hidden="true"></span>
+            </summary>
+            <div class="faq-a">
+              <p>
+                Certified copies are issued for disclosure and for court, each
+                carrying the seal, and any party that receives one can check it.
+                Cruinn supplies the certified transcript and its proof; how it is
+                used in a given case remains a matter for those conducting it.
+              </p>
+            </div>
+          </details>
         </div>
       </div>
     </section>
@@ -358,9 +553,46 @@
   </main>
 
   <footer class="site-footer">
-    <div class="container footer-inner">
-      <span class="footer-brand">Cruinn</span>
-      <span class="footer-meta">Sovereign evidential transcription. Every certified record verifies offline. Ireland.</span>
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-identity">
+          <a class="footer-brand-link" href="#top" aria-label="Cruinn, home">
+            <svg class="brand-mark" width="30" height="30" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+              <g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="60" cy="60" r="53"/>
+                <line x1="60" y1="34" x2="60" y2="40"/>
+                <line x1="38" y1="40" x2="82" y2="40"/>
+                <line x1="38" y1="40" x2="38" y2="47"/><line x1="82" y1="40" x2="82" y2="47"/>
+                <path d="M31 47 Q38 55 45 47"/><path d="M75 47 Q82 55 89 47"/>
+                <line x1="60" y1="40" x2="60" y2="56"/>
+                <line x1="60" y1="56" x2="47" y2="70"/><line x1="60" y1="56" x2="73" y2="70"/>
+                <line x1="47" y1="70" x2="40" y2="83"/><line x1="47" y1="70" x2="54" y2="83"/>
+                <line x1="73" y1="70" x2="66" y2="83"/><line x1="73" y1="70" x2="80" y2="83"/>
+              </g>
+              <g fill="currentColor">
+                <circle cx="60" cy="34" r="3.2"/><circle cx="60" cy="56" r="3"/>
+                <circle cx="47" cy="70" r="2.6"/><circle cx="73" cy="70" r="2.6"/>
+                <circle cx="40" cy="83" r="2.2"/><circle cx="54" cy="83" r="2.2"/><circle cx="66" cy="83" r="2.2"/><circle cx="80" cy="83" r="2.2"/>
+              </g>
+            </svg>
+            <span class="footer-wordmark">Cruinn</span>
+          </a>
+          <p class="footer-descriptor">Sovereign evidential transcription for recorded interviews.</p>
+        </div>
+        <nav class="footer-nav" aria-label="Footer">
+          <a href="#problem">Problem</a>
+          <a href="#process">How it works</a>
+          <a href="#trust">Trust</a>
+          <a href="#who">Who it serves</a>
+          <a href="#proof">Output</a>
+          <a href="#questions">Questions</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-base">
+        <p class="footer-standards">Designed to align with GDPR and the EU Law Enforcement Directive. ISO 27001 in progress.</p>
+        <p class="footer-mark">Processed entirely within Ireland.</p>
+      </div>
     </div>
   </footer>
 </body>
