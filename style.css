@@ -1,1192 +1,447 @@
-/* ===========================================================================
-   Cruinn, one page site
-   Sober Irish govtech: deep green with a restrained gold seal, on off white.
-   No external fonts, no scripts, nothing loaded at runtime.
-   =========================================================================== */
-
+/* Cruinn: a quiet interface for a verifiable record. Content is never motion gated. */
 :root {
-  --green: #2E5E4E;
-  --green-dark: #234a3d;
-  --green-tint: #eef3f0;
-  --green-line: #cfe0d8;
-
-  --gold: #9A6B16;
-  --gold-tint: #f4edda;
-  --gold-line: #e6d5aa;
-
-  --ink: #1A1A1A;
-  --slate: #3D4451;
-  --ink-faint: #6c7269;
-
-  --paper: #F6F6F2;
-  --paper-alt: #efeee8;
+  --paper: #fafbf8;
   --surface: #ffffff;
-  --line: #E2E2DC;
-
-  --maxw: 1100px;
-  --radius: 12px;
-  --shadow-sm: 0 1px 2px rgba(26, 26, 26, 0.04);
-  --shadow: 0 1px 2px rgba(26, 26, 26, 0.04), 0 10px 28px rgba(26, 26, 26, 0.06);
-  --shadow-lg: 0 1px 2px rgba(26, 26, 26, 0.05), 0 24px 54px rgba(26, 26, 26, 0.12);
-
-  --serif: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, "Times New Roman", serif;
-  --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+  --wash: #f0f3ef;
+  --ink: #202923;
+  --muted: #536158;
+  --green: #2e5e4e;
+  --green-dark: #234b3d;
+  --line: #d7dfd8;
+  --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --max-width: 1200px;
 }
-
 * { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 96px; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 400 16px/1.7 var(--sans); -webkit-font-smoothing: antialiased; }
+::selection { color: var(--ink); background: #d9e8de; }
+a { color: var(--green); text-underline-offset: 4px; text-decoration-thickness: 1px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--green); outline-offset: 5px; border-radius: 2px; }
+p, h1, h2, h3, dl, dd { margin: 0; }
+h1, h2, h3 { font-weight: 550; }
+h1, h2 { text-wrap: balance; }
+h2 { font-size: clamp(32px, 3.1vw, 44px); line-height: 1.12; letter-spacing: -.045em; }
+h3 { font-size: 20px; line-height: 1.35; letter-spacing: -.025em; }
+svg { display: block; flex-shrink: 0; }
+.container { width: min(var(--max-width), calc(100% - 96px)); margin-inline: auto; }
+.vh, .brand-url { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+.skip-link { position: fixed; top: 8px; left: 16px; z-index: 100; padding: 8px 16px; background: var(--green); color: white; transform: translateY(-160%); }
+.skip-link:focus { transform: translateY(0); }
 
-html { scroll-behavior: smooth; }
-
-body {
-  margin: 0;
-  font-family: var(--sans);
-  color: var(--ink);
-  background: var(--paper);
-  line-height: 1.65;
-  border-top: 3px solid var(--green);
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
-
-.container {
-  width: 100%;
-  max-width: var(--maxw);
-  margin: 0 auto;
-  padding: 0 24px;
-}
-.container.narrow { max-width: 720px; }
-
-a { color: var(--green); }
-
-a:focus-visible,
-.btn:focus-visible,
-.brand:focus-visible {
-  outline: 2px solid var(--green);
-  outline-offset: 2px;
-  border-radius: 4px;
-}
-
-.skip-link {
-  position: absolute;
-  left: -9999px;
-  top: 0;
-  background: var(--ink);
-  color: #fff;
-  padding: 10px 16px;
-  border-radius: 0 0 8px 0;
-  z-index: 100;
-}
-.skip-link:focus { left: 0; top: 0; }
-
-/* ----- Header ----- */
-.site-header {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  background: rgba(246, 246, 242, 0.9);
-  backdrop-filter: saturate(150%) blur(10px);
-  border-bottom: 1px solid var(--line);
-}
-.header-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 66px;
-}
-.brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 11px;
-  color: var(--green);
-  text-decoration: none;
-  font-weight: 600;
-}
-.brand-mark { display: block; }
-.brand-name {
-  font-family: var(--serif);
-  font-size: 1.35rem;
-  letter-spacing: 0.01em;
-  color: var(--ink);
-}
-.site-nav {
-  display: flex;
-  align-items: center;
-  gap: 28px;
-}
-.site-nav a {
-  color: var(--slate);
-  text-decoration: none;
-  font-size: 0.94rem;
-  font-weight: 500;
-}
-.site-nav a:hover { color: var(--green); }
-.nav-cta {
-  border: 1px solid var(--green);
-  color: var(--green) !important;
-  padding: 7px 17px;
-  border-radius: 999px;
-  transition: background 0.15s ease, color 0.15s ease;
-}
-.nav-cta:hover {
-  background: var(--green);
-  color: #fff !important;
-}
-
-/* ----- Buttons ----- */
-.btn {
-  display: inline-block;
-  padding: 13px 24px;
-  border-radius: 999px;
-  font-weight: 600;
-  font-size: 0.97rem;
-  text-decoration: none;
-  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
-}
-.btn-primary { background: var(--green); color: #fff; }
+/* Always available navigation, including on small screens. */
+.site-header { position: sticky; top: 0; z-index: 50; background: rgb(250 251 248 / 94%); border-bottom: 1px solid var(--line); backdrop-filter: blur(16px); }
+.header-inner { min-height: 80px; display: flex; align-items: center; justify-content: space-between; gap: 32px; }
+.brand, .footer-brand-link { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: var(--green); }
+.brand-mark { width: 36px; height: 36px; }
+.brand-name, .footer-wordmark { color: var(--ink); font-size: 27px; font-weight: 600; line-height: 1; letter-spacing: -.06em; }
+.site-nav { display: flex; align-items: center; gap: 24px; }
+.site-nav a { font-size: 13px; font-weight: 500; text-decoration: none; color: var(--muted); padding-block: 12px; }
+.site-nav a:hover { color: var(--green); text-decoration: underline; }
+.site-nav .nav-cta { color: white; background: var(--green); border: 1px solid var(--green); border-radius: 4px; padding: 8px 16px; }
+.site-nav .nav-cta:hover { background: var(--green-dark); }
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 12px 20px; border: 1px solid var(--line); border-radius: 4px; font-size: 14px; font-weight: 550; text-decoration: none; }
+.btn-primary { background: var(--green); border-color: var(--green); color: white; }
 .btn-primary:hover { background: var(--green-dark); }
-.btn-ghost {
-  border: 1px solid var(--line);
-  color: var(--ink);
-  background: var(--surface);
-}
-.btn-ghost:hover { border-color: var(--green); color: var(--green); }
-.btn:active { transform: translateY(1px); }
+.btn-ghost { color: var(--ink); background: transparent; }
+.btn-ghost:hover { background: var(--wash); border-color: var(--green); }
+.eyebrow, .section-eyebrow { color: var(--green); font-size: 13px; font-weight: 550; line-height: 1.5; }
 
-/* ----- Eyebrows and headings ----- */
-.eyebrow,
-.section-eyebrow {
-  font-size: 0.76rem;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  word-spacing: 0.1em;
-  font-weight: 600;
-  color: var(--green);
-  margin: 0 0 18px;
-}
+/* The document is the product visual. All three original phrases are static. */
+.hero { padding: 88px 0 0; }
+.hero-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 88px; align-items: center; }
+.hero-copy, .hero-visual { min-width: 0; }
+.eyebrow { margin-bottom: 24px; }
+h1 { max-width: 12ch; font-size: clamp(44px, 5vw, 72px); line-height: 1.04; letter-spacing: -.065em; }
+.lead { margin-top: 32px; max-width: 56ch; color: var(--muted); font-size: 16px; line-height: 1.8; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+.hero-visual { background: var(--wash); padding: 40px 24px 24px; border: 1px solid var(--line); border-radius: 8px; }
+.doc { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; box-shadow: 0 2px 4px rgb(32 41 35 / 3%), 0 16px 32px -24px rgb(32 41 35 / 22%); overflow: hidden; }
+.doc-hero { border-top: 3px solid var(--green); }
+.doc-head { padding: 24px; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; border-bottom: 1px solid var(--line); }
+.doc-kicker { display: block; font-size: 13px; font-weight: 550; line-height: 1.5; }
+.doc-tag, .badge { display: inline-block; flex-shrink: 0; width: fit-content; border: 1px solid var(--line); border-radius: 3px; background: var(--wash); color: var(--green); padding: 3px 8px; font-size: 11px; font-weight: 550; line-height: 1.5; }
+.doc-lines { display: grid; gap: 24px; padding: 32px 24px; }
+.doc-row { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 16px; align-items: start; }
+.spk { padding-top: 1px; color: var(--muted); font: 500 10px/1.5 var(--mono); }
+.bars { display: grid; gap: 12px; padding-top: 4px; }
+.bars i { height: 6px; display: block; background: #aab8ae; border-radius: 1px; }
+.doc-row:nth-child(even) .bars i { background: #d2dad4; }
+.doc-seal { display: flex; align-items: center; gap: 16px; padding: 24px; border-top: 1px solid var(--line); background: #f7faf7; }
+.seal { width: 48px; height: 48px; border: 1px solid #9eb5a7; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; color: var(--green); }
+.seal svg { width: 44px; height: 44px; }
+.seal-meta strong, .doc-cert-meta strong { display: block; color: var(--green); font-size: 12px; font-weight: 550; }
+code { font-family: var(--mono); font-size: 10px; color: var(--muted); overflow-wrap: anywhere; }
+.hero-chip { display: flex; gap: 8px; align-items: center; justify-content: center; margin-top: 24px; color: var(--green); font-size: 12px; font-weight: 500; }
+.chip-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+.hero-assurances { display: flex; justify-content: space-between; gap: 24px; border-top: 1px solid var(--line); margin-top: 64px; padding-block: 24px; font-size: 14px; font-weight: 500; color: var(--green); }
+.hero-assurances p { display: flex; align-items: center; gap: 12px; }
+.hero-assurances p::before { content: ""; width: 5px; height: 5px; background: var(--green); flex-shrink: 0; }
+.microprint { font-family: var(--mono); font-size: 8px; line-height: 1.5; color: var(--muted); overflow-wrap: anywhere; }
+.microprint-hero { padding-bottom: 16px; }
 
-/* ----- Hero ----- */
-.hero {
-  padding: 92px 0 80px;
-  background:
-    radial-gradient(1100px 460px at 72% -12%, var(--green-tint), transparent 62%),
-    var(--paper);
-  border-bottom: 1px solid var(--line);
-  overflow-x: clip; /* contain the decorative hero glow so it never causes a page scrollbar */
-}
-.hero-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 44px; align-items: center; }
-@media (min-width: 920px) {
-  .hero-grid { grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); gap: 60px; }
-}
-.hero-copy { min-width: 0; }
+/* Editorial section rhythm: a clear heading and a comfortable reading measure. */
+.section { padding: 96px 0; border-top: 1px solid var(--line); }
+.section-alt { background: var(--wash); }
+.section-heading { display: grid; grid-template-columns: 1fr 1fr; column-gap: 96px; margin-bottom: 48px; }
+.section-heading .section-eyebrow { grid-column: 1; margin-bottom: 16px; }
+.section-heading h2 { grid-column: 1; align-self: start; max-width: 19ch; }
+.section-intro { max-width: 66ch; font-size: 16px; color: var(--muted); }
+.section-heading .section-intro { grid-column: 2; grid-row: 2; }
+.section-footnote { max-width: 88ch; margin-top: 40px; padding-left: 24px; border-left: 2px solid #a2b8a9; color: var(--muted); font-size: 14px; line-height: 1.8; }
+.problem-grid, .lane-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; }
+.problem-stat { padding-top: 24px; border-top: 1px solid #a9b8ad; }
+.problem-figure { font-size: 22px; font-weight: 550; line-height: 1.35; letter-spacing: -.035em; }
+.problem-note { color: var(--green); font-size: 13px; margin-top: 8px; }
+.problem-detail { margin-top: 24px; font-size: 15px; color: var(--muted); }
+.pair-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.pair-grid .lane-card { padding: 32px; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); }
+.pair-grid .lane-card:last-child { background: var(--wash); border-top: 2px solid var(--green); }
+.lane-card p:not(.lane-status) { margin-top: 16px; color: var(--muted); font-size: 15px; }
+.lane-grid .lane-card { padding-top: 24px; border-top: 1px solid var(--line); }
+.lane-status { margin-bottom: 24px; }
+.lane-grid .lane-card:not(:first-child) .badge { color: var(--muted); background: transparent; }
 
-.hero h1 {
-  font-family: var(--serif);
-  font-weight: 600;
-  font-size: clamp(2.1rem, 4.8vw, 3.35rem);
-  line-height: 1.1;
-  letter-spacing: -0.018em;
-  margin: 0 0 22px;
-  max-width: 15ch;
-  color: var(--ink);
-}
-.lead {
-  font-size: 1.16rem;
-  color: var(--slate);
-  max-width: 52ch;
-  margin: 0 0 34px;
-}
-.hero-actions { display: flex; flex-wrap: wrap; gap: 14px; }
+/* Six distinct stages share one continuous custody line. */
+#process { background: #eaf0ea; }
+.lifecycle { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); margin: 0; padding: 32px; list-style: none; background: var(--surface); border: 1px solid #b8c8bc; border-radius: 6px; }
+.stage { min-width: 0; padding-right: 24px; }
+.stage:last-child { padding-right: 0; }
+.stage-top { display: flex; align-items: center; margin-bottom: 24px; margin-right: -24px; }
+.stage:last-child .stage-top { margin-right: 0; }
+.stage-node { width: 32px; height: 32px; border: 1px solid #8aa493; border-radius: 50%; display: grid; place-items: center; color: var(--green); font-size: 12px; flex-shrink: 0; }
+.stage-line { height: 1px; flex: 1; background: #b8c8bc; }
+.stage-node-seal { background: var(--green); color: white; border-color: var(--green); }
+.stage h3 { font-size: 16px; letter-spacing: -.02em; line-height: 1.45; min-height: 48px; }
+.stage p { color: var(--muted); font-size: 13px; line-height: 1.75; margin-top: 12px; }
+.trust-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 40px; row-gap: 32px; }
+.trust-card { padding-top: 24px; border-top: 1px solid #a9b8ad; }
+.trust-card h3 { font-size: 18px; }
+.trust-card p { margin-top: 12px; font-size: 15px; color: var(--muted); }
+.certs { display: grid; grid-template-columns: 1fr 1fr; column-gap: 96px; margin-top: 56px; padding-top: 32px; border-top: 1px solid var(--line); }
+.certs-title { grid-column: 1; }
+.certs-note { grid-column: 1; margin-top: 16px; color: var(--muted); font-size: 14px; }
+.certs-list { grid-column: 2; grid-row: 1 / span 2; list-style: none; padding: 0; margin: 0; }
+.certs-list li { display: grid; grid-template-columns: 112px 1fr; align-items: baseline; gap: 16px; border-bottom: 1px solid var(--line); padding: 16px 0; font-size: 13px; color: var(--muted); }
+.certs-list li:first-child { padding-top: 0; }
+.std-list { border-top: 1px solid var(--line); }
+.std-item { display: grid; grid-template-columns: 1fr 1fr; gap: 96px; padding: 24px 0; border-bottom: 1px solid var(--line); }
+.std-item dt { max-width: 30ch; font-weight: 500; font-size: 18px; letter-spacing: -.02em; }
+.std-item dd { color: var(--muted); font-size: 15px; }
 
-/* ----- Hero visual ----- */
-.hero-visual {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 360px;
-  min-width: 0; /* allow the card to shrink; its hash line truncates rather than overflow */
-}
-.hv-glow {
-  position: absolute;
-  inset: -12%;
-  background: radial-gradient(closest-side, rgba(46, 94, 78, 0.16), transparent 72%);
-  z-index: 0;
-}
-.hero-chip {
-  position: absolute;
-  z-index: 3;
-  top: 2px;
-  right: 6px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 7px 14px;
-  box-shadow: var(--shadow);
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--ink);
-}
-.chip-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 0 4px rgba(46, 94, 78, 0.16);
-}
+/* Specimen: document, verification legend, then the delivery note. */
+.specimen { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); gap: 32px 48px; padding: 40px; background: var(--wash); border: 1px solid var(--line); border-radius: 6px; }
+.doc-specimen { grid-column: 1; grid-row: 1 / span 2; border-top: 3px solid var(--green); }
+.doc-specimen .doc-head { padding: 24px 32px; }
+.doc-sub { display: block; font-size: 11px; color: var(--muted); margin-top: 8px; }
+.doc-lines-lg { padding: 40px 32px; gap: 28px; }
+.doc-lines-lg .doc-row { grid-template-columns: 88px minmax(0, 1fr); }
+.doc-cert { display: flex; align-items: center; gap: 16px; margin: 0 32px; padding: 24px 0; border-top: 1px solid var(--line); }
+.seal-lg { width: 56px; height: 56px; }
+.seal-lg svg { width: 50px; height: 50px; }
+.doc-cert-note { display: block; font-size: 11px; color: var(--muted); margin-top: 8px; }
+.microprint-seal { margin: 0 32px 24px; }
+.seal-legend { grid-column: 2; }
+.seal-legend-cap { font-size: 14px; font-weight: 550; margin-bottom: 16px; }
+.anno-list { list-style: none; margin: 0; padding: 0; }
+.seal-anno { padding: 12px 0; border-top: 1px solid var(--line); }
+.anno-label { display: block; color: var(--green); font-size: 13px; font-weight: 550; }
+.anno-desc { display: block; color: var(--muted); font-size: 12px; margin-top: 4px; }
+.specimen-aside { grid-column: 2; }
+.specimen-aside h3 { font-size: 18px; }
+.specimen-aside p { font-size: 13px; color: var(--muted); margin-top: 16px; }
+.specimen-aside .specimen-caveat { font-size: 11px; }
+.specimen-link a { font-weight: 500; }
 
-/* ----- Document card (hero + specimen) ----- */
-.doc {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  min-width: 0; /* shrink below the nowrap hash line's intrinsic width */
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  box-shadow: var(--shadow-lg);
-  overflow: hidden;
-}
-.doc-hero { max-width: 372px; }
-
-.doc-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 15px 20px;
-  border-bottom: 1px solid var(--line);
-  background: linear-gradient(180deg, #fbfbf9, var(--surface));
-}
-.doc-head-lines { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
-.doc-kicker {
-  font-family: var(--serif);
-  font-weight: 600;
-  color: var(--ink);
-  font-size: 0.95rem;
-}
-.doc-sub { font-size: 0.72rem; color: var(--ink-faint); }
-.doc-tag {
-  flex: none;
-  font-size: 0.64rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-weight: 700;
-  color: var(--gold);
-  background: var(--gold-tint);
-  border: 1px solid var(--gold-line);
-  border-radius: 999px;
-  padding: 4px 11px;
-}
-
-.doc-lines { padding: 18px 20px; display: grid; gap: 14px; }
-.doc-lines-lg { gap: 16px; padding: 22px 24px; }
-.doc-row { display: flex; gap: 12px; align-items: center; }
-.spk {
-  flex: none;
-  width: 58px;
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  color: var(--green);
-}
-.spk.b { color: var(--ink-faint); }
-.bars { display: flex; gap: 6px; flex: 1; min-width: 0; }
-.bars i { height: 7px; border-radius: 4px; background: #e8e5db; display: block; }
-
-/* Seal object: emblem in a gold ringed roundel */
-.seal {
-  flex: none;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--green);
-  background: var(--surface);
-  border: 2px solid var(--gold);
-  box-shadow: 0 0 0 3px var(--gold-tint);
-}
-.seal-lg { width: 58px; height: 58px; }
-
-.doc-seal {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  margin: 0 20px 18px;
-  padding: 12px 14px;
-  background: var(--green-tint);
-  border: 1px solid var(--green-line);
-  border-radius: 10px;
-}
-.seal-meta { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.seal-meta strong { font-size: 0.8rem; color: var(--green-dark); }
-.seal-meta code {
-  font-family: var(--mono);
-  font-size: 0.64rem;
-  color: var(--ink-faint);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* ----- Sections ----- */
-.section { padding: 92px 0; }
-.section-alt { background: var(--paper-alt); border-block: 1px solid var(--line); }
-
-.section h2 {
-  font-family: var(--serif);
-  font-weight: 600;
-  font-size: clamp(1.65rem, 3vw, 2.3rem);
-  line-height: 1.16;
-  letter-spacing: -0.017em;
-  margin: 0 0 16px;
-  max-width: 22ch;
-  color: var(--ink);
-}
-.section-intro {
-  font-size: 1.06rem;
-  color: var(--slate);
-  max-width: 62ch;
-  margin: 0 0 48px;
-}
-
-/* ----- Evidence lifecycle: chain of custody rail ----- */
-.lifecycle {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-}
-.stage {
-  flex: 1 1 0;
-  min-width: 0;
-}
-.stage-top {
-  display: flex;
-  align-items: center;
-  height: 46px;
-  margin-bottom: 20px;
-}
-.stage-node {
-  flex: none;
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  background: var(--green);
-  color: #fff;
-  font-family: var(--serif);
-  font-weight: 600;
-  font-size: 1.15rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 12px rgba(46, 94, 78, 0.22);
-  position: relative;
-  z-index: 2;
-}
-.stage-node-seal {
-  background: var(--gold);
-  box-shadow: 0 4px 12px rgba(154, 107, 22, 0.28), 0 0 0 4px var(--gold-tint);
-}
-.stage-line {
-  flex: 1;
-  height: 2px;
-  background: var(--green-line);
-}
-.stage:last-child .stage-line { display: none; }
-.stage h3 {
-  margin: 0 0 7px;
-  padding-right: 22px;
-  font-size: 1.02rem;
-  font-weight: 600;
-  color: var(--ink);
-  line-height: 1.28;
-}
-.stage p {
-  margin: 0;
-  padding-right: 22px;
-  font-size: 0.9rem;
-  color: var(--slate);
-  line-height: 1.55;
-}
-
-/* Reserve two title lines so all descriptions align across the horizontal rail */
-@media (min-width: 920px) {
-  .stage h3 { min-height: 2.7em; }
-}
-
-@media (max-width: 919px) {
-  .lifecycle { display: block; }
-  .stage { position: relative; padding: 0 0 30px 64px; }
-  .stage-top { position: absolute; left: 0; top: 0; height: auto; margin: 0; display: block; }
-  .stage-line { display: none; }
-  .stage::before {
-    content: "";
-    position: absolute;
-    left: 22px;
-    top: 4px;
-    bottom: -4px;
-    width: 2px;
-    background: var(--green-line);
-    z-index: 0;
-  }
-  .stage:last-child::before { display: none; }
-  .stage h3 { padding-right: 0; padding-top: 10px; }
-  .stage p { padding-right: 0; font-size: 0.95rem; }
-}
-
-/* ----- Trust grid ----- */
-.trust-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 18px;
-}
-@media (min-width: 620px) { .trust-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 940px) { .trust-grid { grid-template-columns: repeat(3, 1fr); } }
-
-.trust-card {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-top: 3px solid var(--green);
-  border-radius: var(--radius);
-  padding: 24px 24px 22px;
-  box-shadow: var(--shadow);
-  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-}
-.trust-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); border-color: var(--green); }
-.trust-card h3 {
-  margin: 0 0 9px;
-  font-size: 1.06rem;
-  font-weight: 600;
-  color: var(--ink);
-}
-.trust-card p { margin: 0; color: var(--slate); font-size: 0.96rem; }
-
-.certs {
-  margin-top: 40px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-left: 3px solid var(--gold);
-  border-radius: var(--radius);
-  padding: 28px 30px;
-}
-.certs-title { margin: 0 0 10px; font-size: 1.08rem; font-weight: 600; color: var(--ink); }
-.certs-note { margin: 0 0 18px; color: var(--slate); max-width: 66ch; }
-.certs-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
-.certs-list li { display: flex; align-items: center; gap: 12px; color: var(--ink); font-weight: 500; }
-.badge {
-  flex: none;
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-weight: 700;
-  color: var(--gold);
-  background: var(--gold-tint);
-  border: 1px solid var(--gold-line);
-  padding: 4px 11px;
-  border-radius: 999px;
-}
-
-/* ----- Specimen ----- */
-.specimen { display: grid; gap: 30px; align-items: start; }
-@media (min-width: 900px) {
-  .specimen { grid-template-columns: 1.12fr 0.88fr; gap: 44px; }
-}
-.doc-cert {
-  display: flex;
-  gap: 14px;
-  align-items: flex-start;
-  margin: 0 22px 22px;
-  padding: 15px 17px;
-  background: var(--gold-tint);
-  border: 1px solid var(--gold-line);
-  border-radius: 10px;
-}
-.doc-cert-meta { min-width: 0; }
-.doc-cert-meta strong { display: block; font-size: 0.9rem; color: var(--ink); margin-bottom: 4px; }
-.doc-cert-meta code {
-  font-family: var(--mono);
-  font-size: 0.68rem;
-  color: var(--green-dark);
-  word-break: break-word;
-}
-.doc-cert-note { display: block; font-size: 0.74rem; color: var(--slate); margin-top: 6px; }
-
-.specimen-aside { padding-top: 4px; }
-.specimen-aside h3 {
-  font-family: var(--serif);
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: var(--ink);
-  margin: 0 0 12px;
-}
-.specimen-aside p { margin: 0 0 16px; color: var(--slate); }
-.specimen-link { font-weight: 500; }
-.specimen-link a {
-  font-weight: 600;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
-  transition: text-decoration-thickness 0.16s ease, text-underline-offset 0.16s ease;
-}
-.specimen-link a:hover { text-decoration-thickness: 2px; text-underline-offset: 4px; }
-.specimen-caveat { font-size: 0.82rem; color: var(--ink-faint); font-style: italic; margin: 0; }
-
-/* ----- Contact ----- */
-.contact-email {
-  font-family: var(--serif);
-  font-size: clamp(1.5rem, 3vw, 2.05rem);
-  margin: 10px 0 8px;
-}
-.contact-email a { text-decoration: none; }
-.contact-email a:hover { text-decoration: underline; text-underline-offset: 4px; }
-.contact-loc { color: var(--ink-faint); font-weight: 500; margin: 0; }
-
-/* ----- Footer ----- */
-.site-footer {
-  border-top: 1px solid var(--line);
-  background: var(--paper-alt);
-  padding: 52px 0 30px;
-}
-.footer-top {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 28px 40px;
-  padding-bottom: 26px;
-  border-bottom: 1px solid var(--line);
-}
-.footer-identity { max-width: 36ch; }
-.footer-brand-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 11px;
-  color: var(--green);
-  text-decoration: none;
-}
-.footer-wordmark {
-  font-family: var(--serif);
-  font-weight: 600;
-  font-size: 1.3rem;
-  color: var(--ink);
-  letter-spacing: 0.01em;
-}
-.footer-descriptor {
-  margin: 12px 0 0;
-  color: var(--slate);
-  font-size: 0.94rem;
-}
-.footer-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px 24px;
-  align-items: center;
-}
-.footer-nav a {
-  color: var(--slate);
-  text-decoration: none;
-  font-size: 0.9rem;
-  font-weight: 500;
-}
-.footer-nav a:hover { color: var(--green); }
-.footer-base {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 8px 32px;
-  padding-top: 22px;
-}
-.footer-standards {
-  margin: 0;
-  color: var(--ink-faint);
-  font-size: 0.85rem;
-  max-width: 64ch;
-}
-.footer-mark {
-  margin: 0;
-  color: var(--green-dark);
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-
-/* ----- Responsive ----- */
-@media (max-width: 720px) {
-  .site-nav { gap: 14px; }
-  .site-nav a:not(.nav-cta) { display: none; }
-  .hero { padding: 68px 0 58px; }
-  .section { padding: 64px 0; }
-  .section-intro { margin-bottom: 38px; }
-  .doc-hero { max-width: 100%; }
-}
-
-/* ===========================================================================
-   Premium enhancement layer, new sections in the same hand
-   ---------------------------------------------------------------------------
-   Problem strip, audience lanes, annotated seal, questions and a fuller
-   footer. Built from the existing tokens, card language and eyebrow scale so
-   the page still reads as one document. Reveals for these are woven into the
-   scroll-reveal block below; nothing here sets opacity in the base cascade.
-   =========================================================================== */
-
-/* Anchored sections clear the sticky 66px header when jumped to. */
-.hero, .section { scroll-margin-top: 82px; }
-
-/* URL printed beside the wordmark; carries no weight on screen. */
-.brand-url { display: none; }
-
-/* ----- The problem: three quiet statements of institutional fact ----- */
-.problem-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 28px;
-}
-@media (min-width: 720px) {
-  .problem-grid { grid-template-columns: repeat(3, 1fr); gap: 36px; }
-}
-.problem-stat {
-  border-top: 2px solid var(--green-line);
-  padding-top: 18px;
-}
-.problem-figure {
-  font-family: var(--serif);
-  font-weight: 600;
-  font-size: clamp(1.35rem, 2.3vw, 1.7rem);
-  line-height: 1.14;
-  letter-spacing: -0.012em;
-  color: var(--ink);
-  margin: 0 0 9px;
-}
-@media (min-width: 720px) {
-  /* Reserve two lines so the notes and details align across the three columns. */
-  .problem-figure { min-height: 2.28em; }
-}
-.problem-note {
-  font-size: 0.82rem;
-  color: var(--ink-faint);
-  margin: 0 0 14px;
-}
-.problem-detail {
-  margin: 0;
-  color: var(--slate);
-  font-size: 0.96rem;
-}
-
-/* ----- Audience lanes: who relies on the sealed record ----- */
-.lane-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
-}
-@media (min-width: 880px) {
-  .lane-grid { grid-template-columns: repeat(3, 1fr); gap: 24px; }
-}
-.lane-card {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-top: 3px solid var(--green);
-  border-radius: var(--radius);
-  padding: 28px 26px 26px;
-  box-shadow: var(--shadow);
-  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-}
-.lane-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--green);
-}
-.lane-card h3 {
-  font-size: 1.12rem;
-  font-weight: 600;
-  color: var(--ink);
-  margin: 0 0 10px;
-}
-.lane-card p { margin: 0; color: var(--slate); font-size: 0.96rem; }
-
-/* ----- Annotated seal: a quiet anatomy legend beneath the specimen -----
-   The specimen card is untouched. On desktop the legend sits under the card
-   in the left grid track; on mobile it stacks directly below it as a plain
-   four-row legend. Leader ticks rise toward the certified block above. */
-@media (min-width: 900px) {
-  .specimen {
-    grid-template-areas:
-      "doc    aside"
-      "legend legend";
-    column-gap: 44px;
-    row-gap: 36px;
-  }
-  .doc-specimen { grid-area: doc; }
-  .specimen-aside { grid-area: aside; }
-  .seal-legend { grid-area: legend; }
-  /* A hairline seats the anatomy strip as one figure caption under the specimen. */
-  .seal-legend { border-top: 1px solid var(--line); padding-top: 26px; }
-}
-.seal-legend-cap {
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  word-spacing: 0.1em;
-  font-weight: 600;
-  color: var(--green);
-  margin: 0 0 18px;
-}
-.anno-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 18px 26px;
-}
-@media (min-width: 540px) { .anno-list { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 900px) { .anno-list { grid-template-columns: repeat(4, 1fr); } }
-/* Each part is a hairline-ruled cell: a legend keyed to the specimen above,
-   not a diagram with pins pointing at nothing. Reads the same wide or stacked. */
-.seal-anno {
-  display: grid;
-  gap: 6px;
-  border-top: 1px solid var(--line);
-  padding-top: 13px;
-}
-.anno-label {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-weight: 700;
-  color: var(--green-dark);
-}
-.anno-desc {
-  font-size: 0.86rem;
-  line-height: 1.4;
-  color: var(--slate);
-}
-
-/* ----- Common questions: native disclosure, styled to the brand ----- */
-.faq {
-  max-width: 820px;
-  border-top: 1px solid var(--line);
-}
+/* Native disclosure controls keep the FAQ fully usable without scripts. */
+#questions .container { display: grid; grid-template-columns: 1fr 1.35fr; column-gap: 96px; }
+#questions .section-eyebrow { grid-column: 1; margin-bottom: 16px; }
+#questions h2 { grid-column: 1; max-width: 13ch; }
+.faq { grid-column: 2; grid-row: 1 / span 3; min-width: 0; border-top: 1px solid #a9b8ad; }
 .faq-item { border-bottom: 1px solid var(--line); }
-.faq-item summary {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  padding: 22px 6px;
-  cursor: pointer;
-  list-style: none;
-}
+.faq-item summary { display: flex; justify-content: space-between; gap: 24px; cursor: pointer; list-style: none; padding: 24px 0; font-size: 15px; font-weight: 500; line-height: 1.5; }
 .faq-item summary::-webkit-details-marker { display: none; }
-.faq-item summary::marker { content: ""; }
-.faq-item summary:focus-visible {
-  outline: 2px solid var(--green);
-  outline-offset: 3px;
-  border-radius: 6px;
+.faq-icon { width: 16px; height: 16px; flex-shrink: 0; position: relative; margin-top: 3px; color: var(--green); }
+.faq-icon::before, .faq-icon::after { content: ""; position: absolute; top: 7px; left: 2px; width: 12px; height: 1px; background: currentColor; }
+.faq-icon::after { transform: rotate(90deg); }
+.faq-item[open] .faq-icon::after { transform: rotate(0); }
+.faq-a { padding: 0 32px 24px 0; color: var(--muted); font-size: 14px; }
+#contact { background: var(--green-dark); color: white; }
+#contact .section-heading { margin-bottom: 0; }
+#contact .section-eyebrow, #contact .section-intro { color: #d9e5dc; }
+#contact h2 { font-size: 56px; }
+.contact-email { margin-top: 40px; }
+.contact-email a { color: white; font-size: clamp(28px, 3.2vw, 44px); letter-spacing: -.045em; text-decoration-thickness: 1px; text-underline-offset: 8px; }
+.contact-loc { margin-top: 24px; color: #d9e5dc; font-size: 13px; }
+#contact :focus-visible { outline-color: white; }
+.site-footer { padding: 56px 0 24px; border-top: 1px solid var(--line); }
+.footer-top { display: grid; grid-template-columns: 1fr 1fr; gap: 96px; }
+.footer-descriptor { font-size: 13px; margin-top: 16px; color: var(--muted); }
+.footer-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px 24px; }
+.footer-nav a { color: var(--muted); font-size: 12px; text-decoration: none; width: fit-content; padding-block: 4px; }
+.footer-nav a:hover { text-decoration: underline; }
+.footer-base { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 32px; font-size: 11px; color: var(--muted); }
+
+@media (max-width: 1100px) {
+  .container { width: calc(100% - 64px); }
+  .header-inner { gap: 24px; }
+  .site-nav { gap: 16px; }
+  .site-nav a { font-size: 12px; }
+  .hero-grid { gap: 40px; }
+  .section-heading, .certs, .std-item, .footer-top, #questions .container { column-gap: 48px; }
+  .lifecycle { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 40px; }
+  .stage:nth-child(3) .stage-line { display: none; }
+  .stage h3 { min-height: 0; }
+  .specimen { padding: 24px; gap: 32px; }
+  .doc-lines-lg, .doc-specimen .doc-head { padding-inline: 24px; }
+  .doc-cert { margin-inline: 24px; }
 }
-.faq-q {
-  font-size: 1.06rem;
-  font-weight: 600;
-  color: var(--ink);
-  line-height: 1.4;
+@media (max-width: 800px) {
+  html { scroll-padding-top: 152px; }
+  .header-inner { flex-wrap: wrap; gap: 0; padding-block: 16px 8px; }
+  .brand { margin-bottom: 8px; }
+  .site-nav { width: 100%; flex-wrap: wrap; gap: 0 20px; }
+  .site-nav a { padding-block: 8px; }
+  .site-nav .nav-cta { padding: 4px 12px; }
+  .hero { padding-top: 56px; }
+  .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+  h1 { font-size: 56px; }
+  .hero-visual { width: 100%; max-width: 520px; padding: 32px; }
+  .doc-head { padding: 16px; gap: 8px; }
+  .doc-lines { padding: 24px 16px; }
+  .doc-seal { padding: 16px; gap: 8px; }
+  .doc-kicker { font-size: 11px; }
+  .hero-assurances { margin-top: 48px; font-size: 12px; }
+  .section { padding: 64px 0; }
+  .section-heading { column-gap: 32px; }
+  .problem-grid, .lane-grid { gap: 24px; }
+  .problem-figure { font-size: 19px; }
+  .pair-grid .lane-card { padding: 24px; }
+  .trust-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; }
+  .specimen { grid-template-columns: 1fr; padding: 32px; }
+  .doc-specimen, .seal-legend, .specimen-aside { grid-column: 1; grid-row: auto; }
+  .anno-list { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; }
+  .certs, #questions .container { grid-template-columns: 1fr; }
+  .certs-list { grid-column: 1; grid-row: auto; margin-top: 32px; }
+  .faq { grid-column: 1; grid-row: auto; margin-top: 32px; }
+  #questions h2 { max-width: none; }
+  .footer-top { gap: 32px; }
+  .footer-nav { grid-template-columns: 1fr 1fr; }
 }
-.faq-item summary:hover .faq-q { color: var(--green); }
-.faq-icon {
-  flex: none;
-  width: 11px;
-  height: 11px;
-  margin-right: 5px;
-  border-right: 2px solid var(--green);
-  border-bottom: 2px solid var(--green);
-  transform: translateY(-2px) rotate(45deg);
-  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+@media (max-width: 600px) {
+  .container { width: calc(100% - 40px); }
+  .header-inner { padding-top: 12px; }
+  .brand-mark { width: 28px; height: 28px; }
+  .brand-name { font-size: 23px; }
+  .site-nav { gap: 0 16px; }
+  .site-nav a { font-size: 11px; }
+  .hero { padding-top: 40px; }
+  .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+  .eyebrow { max-width: 30ch; font-size: 12px; }
+  h1 { font-size: clamp(44px, 11.8vw, 64px); }
+  .lead { margin-top: 24px; font-size: 15px; }
+  .hero-actions { gap: 8px; margin-top: 24px; }
+  .btn { padding: 12px 16px; font-size: 12px; }
+  .hero-visual { padding: 24px; }
+  .doc-head { padding: 20px 16px; }
+  .hero-assurances { flex-direction: column; gap: 16px; margin-top: 32px; }
+  .microprint-hero { font-size: 6px; }
+  .section { padding: 56px 0; }
+  .section-heading { display: block; margin-bottom: 32px; }
+  .section-heading h2 { max-width: 20ch; }
+  .section-intro { margin-top: 24px; font-size: 15px; }
+  .problem-grid, .lane-grid, .pair-grid, .trust-grid { grid-template-columns: 1fr; gap: 32px; }
+  .problem-figure { font-size: 23px; }
+  .problem-detail { margin-top: 16px; }
+  .section-footnote { padding-left: 16px; margin-top: 32px; font-size: 13px; }
+  .pair-grid .lane-card { padding: 24px; }
+  .lifecycle { display: block; padding: 24px; }
+  .stage { position: relative; padding: 0 0 32px 48px; }
+  .stage:last-child { padding: 0 0 0 48px; }
+  .stage-top { position: absolute; top: 0; bottom: 0; left: 0; display: block; margin: 0; }
+  .stage-line, .stage:nth-child(3) .stage-line { display: block; position: absolute; top: 32px; bottom: 0; left: 15px; width: 1px; height: auto; }
+  .stage h3 { padding-top: 4px; }
+  .stage p { margin-top: 8px; }
+  .certs { margin-top: 40px; }
+  .certs-list li { grid-template-columns: 1fr; gap: 8px; }
+  .std-item { grid-template-columns: 1fr; gap: 12px; padding: 24px 0; }
+  .std-item dt { max-width: none; }
+  .specimen { padding: 16px; gap: 32px; }
+  .doc-specimen .doc-head { padding: 20px 16px; }
+  .doc-sub { font-size: 10px; }
+  .doc-lines-lg { padding: 24px 16px; gap: 24px; }
+  .doc-lines-lg .doc-row { grid-template-columns: 72px minmax(0, 1fr); gap: 8px; }
+  .spk { font-size: 9px; }
+  .doc-cert { margin-inline: 16px; gap: 12px; align-items: flex-start; }
+  .seal-lg { width: 40px; height: 40px; }
+  .seal-lg svg { width: 36px; height: 36px; }
+  .doc-cert-meta { min-width: 0; }
+  .doc-cert-meta strong { font-size: 11px; }
+  .microprint-seal { margin-inline: 16px; font-size: 6px; }
+  .anno-list { grid-template-columns: 1fr; }
+  .faq-item summary { gap: 16px; }
+  .faq-a { padding-right: 16px; }
+  #contact h2 { font-size: 44px; }
+  .contact-email { margin-top: 32px; }
+  .footer-top { grid-template-columns: 1fr; }
+  .footer-nav { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .footer-base { flex-direction: column; gap: 16px; margin-top: 32px; }
 }
-.faq-item[open] .faq-icon { transform: translateY(2px) rotate(-135deg); }
-.faq-item summary:hover .faq-icon { border-color: var(--green-dark); }
-.faq-a { padding: 0 6px 26px; }
-.faq-a p { margin: 0; color: var(--slate); font-size: 1rem; max-width: 66ch; }
-
-/* ===========================================================================
-   Craft layer, motion and micro-detail
-   ---------------------------------------------------------------------------
-   Devices drawn from the world of sealed evidence: an embosser press, a chain
-   of custody that draws itself, and security-paper microprint. Pure CSS, no JS.
-
-   Static-safety model. Content is fully visible in the base cascade. Every
-   entrance and reveal lives inside @media (prefers-reduced-motion: no-preference),
-   and every scroll-driven reveal additionally inside
-   @supports (animation-timeline: view()). So reduced-motion users, browsers with
-   no scroll-timeline support (Safari today), crawlers and link previews all get
-   the complete, legible page with nothing hidden. Motion is added only where it
-   is both welcomed and supported. This supersedes the earlier no-entrance-anim
-   note: the hazard was opacity set in the base cascade, which we never do. The
-   reveal rises with the independent translate property so hover transforms still
-   compose over a filled entrance.
-   =========================================================================== */
-
-/* Selection and tabular figures. */
-::selection { background: var(--green); color: #f6f6f2; }
-.seal-meta code,
-.doc-cert-meta code { font-variant-numeric: tabular-nums; }
-
-/* ----- Hero headline: a quiet three-phrase cycle -----
-   One stable heading for assistive tech and crawlers is carried by the visually
-   hidden line (.vh, phrase 1); the three visible phrases are aria-hidden and
-   cross-fade. The base cascade shows phrase 1 only, so reduced-motion and any
-   context without CSS animation get a correct, static headline. Hanging
-   punctuation was dropped here: across overlapping stacked lines it is
-   unpredictable, and the headline is no longer a single phrase. */
-.vh {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  border: 0;
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  overflow: hidden;
-  white-space: nowrap;
-}
-.hero-cycle { position: relative; }
-.hero-cycle .cycle { display: grid; }
-.hero-cycle .cycle-line {
-  grid-area: 1 / 1;          /* all phrases share one cell: reserves the tallest */
-  margin: 0;
-  opacity: 0;                /* base shows phrase 1 only */
-}
-.hero-cycle .cycle-line:first-child { opacity: 1; }
-
-@media (prefers-reduced-motion: no-preference) {
-  .hero-cycle .cycle-line { animation: phraseCycle 24s cubic-bezier(0.22, 1, 0.36, 1) infinite; }
-  .hero-cycle .cycle-line:nth-child(1) { animation-delay: 0s; }
-  .hero-cycle .cycle-line:nth-child(2) { animation-delay: -16s; }
-  .hero-cycle .cycle-line:nth-child(3) { animation-delay: -8s; }
-}
-
-/* 24s period, 8s per phrase: ~6.8s hold, then a staggered 1.2s crossfade in
-   which the outgoing phrase reaches 0 before the incoming one leaves 0, so two
-   phrases are never legibly stacked. Entry rises 8px; exit is a plain fade. */
-@keyframes phraseCycle {
-  0%     { opacity: 1; transform: translateY(0); }
-  28.33% { opacity: 1; transform: translateY(0); }
-  30.83% { opacity: 0; transform: translateY(0); }
-  31%    { opacity: 0; transform: translateY(8px); }
-  97.5%  { opacity: 0; transform: translateY(8px); }
-  100%   { opacity: 1; transform: translateY(0); }
-}
-
-/* Security-paper microprint: a hairline that is actually micro-set sha256 hex.
-   Texture, not a headline. Non-selectable and hidden from assistive tech. */
-.microprint {
-  font-family: var(--mono);
-  font-size: 6.5px;
-  line-height: 1;
-  letter-spacing: 0.14em;
-  font-variant-numeric: tabular-nums;
-  color: var(--ink);
-  opacity: 0.05;
-  white-space: nowrap;
-  overflow: hidden;
-  user-select: none;
-  -webkit-user-select: none;
-  pointer-events: none;
-}
-.microprint-hero { margin-top: 44px; }
-.microprint-seal { margin: 2px 22px 0; padding-bottom: 14px; }
-
-/* The certificate seal turns a few degrees when its card is engaged. */
-.doc-specimen .seal-lg { transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1); }
-.doc-specimen:hover .seal-lg { transform: rotate(5deg); }
-
-/* ---- Keyframes ---- */
-@keyframes rise {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes settle {
-  from { opacity: 0; transform: translateY(16px) scale(0.985); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
-}
-@keyframes reveal-rise {
-  from { opacity: 0; translate: 0 14px; }
-  to   { opacity: 1; translate: 0 0; }
-}
-/* The embosser press: overshoot, a whisper of counter-rotation, a shadow bloom. */
-@keyframes stamp {
-  0%   { opacity: 0; transform: scale(1.12) rotate(1.6deg); box-shadow: 0 0 0 0 rgba(154, 107, 22, 0); }
-  55%  { opacity: 1; transform: scale(0.985) rotate(-0.4deg); box-shadow: 0 8px 20px 0 rgba(154, 107, 22, 0.30); }
-  100% { opacity: 1; transform: scale(1) rotate(0deg); box-shadow: 0 1px 2px 0 rgba(154, 107, 22, 0.10); }
-}
-@keyframes stamp-node {
-  0%   { opacity: 0; transform: scale(1.12) rotate(1.6deg); box-shadow: 0 0 0 0 rgba(46, 94, 78, 0); }
-  55%  { opacity: 1; transform: scale(0.97) rotate(-0.5deg); box-shadow: 0 10px 22px 0 rgba(46, 94, 78, 0.34); }
-  100% { opacity: 1; transform: scale(1) rotate(0deg); box-shadow: 0 4px 12px 0 rgba(46, 94, 78, 0.22); }
-}
-@keyframes resolve {
-  from { opacity: 0; transform: translateY(3px); filter: blur(2px); }
-  to   { opacity: 1; transform: translateY(0); filter: blur(0); }
-}
-@keyframes draw-line {
-  from { transform: scaleX(0); }
-  to   { transform: scaleX(1); }
-}
-@keyframes pop-node {
-  from { opacity: 0; transform: scale(0.6); }
-  to   { opacity: 1; transform: scale(1); }
-}
-@keyframes breathe {
-  0%, 100% { opacity: 1; box-shadow: 0 0 0 3px rgba(46, 94, 78, 0.18); }
-  50%      { opacity: 0.6; box-shadow: 0 0 0 5px rgba(46, 94, 78, 0.07); }
-}
-
-/* ---- Motion, only when welcomed ---- */
-@media (prefers-reduced-motion: no-preference) {
-
-  /* The certification: the hero's orchestrated page-load moment, under 900ms.
-     The text column rises in quiet steps; the record card settles; its CERTIFIED
-     chip presses in like an embosser; the seal hash resolves beneath it. */
-  .hero-copy > * { animation: rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
-  .hero-copy .eyebrow      { animation-delay: 0.04s; }
-  .hero-copy h1            { animation-delay: 0.12s; }
-  .hero-copy .lead         { animation-delay: 0.20s; }
-  .hero-copy .hero-actions { animation-delay: 0.28s; }
-
-  .hero-visual .doc       { animation: settle 0.48s cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: 0.30s; }
-  .hero-visual .hero-chip { animation: rise 0.36s cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: 0.56s; }
-  .doc-hero .doc-tag      { animation: stamp 0.28s ease-out both; animation-delay: 0.54s; }
-  .doc-hero .seal-meta code { animation: resolve 0.22s ease-out both; animation-delay: 0.64s; }
-
-  /* The "Verifies offline" status dot breathes like an LED. */
-  .chip-dot { animation: breathe 2.8s ease-in-out infinite; }
-
-  /* Scroll-driven reveals and the chain-of-custody draw. Guarded so any browser
-     without scroll timelines simply shows the finished, static page. */
-  @supports (animation-timeline: view()) {
-
-    .section-eyebrow,
-    .section h2,
-    .section-intro,
-    .problem-stat,
-    .lane-card,
-    .trust-card,
-    .certs,
-    .doc-specimen,
-    .specimen-aside,
-    .seal-legend-cap,
-    .seal-anno,
-    .faq-item,
-    .stage h3,
-    .stage p,
-    .contact > * {
-      opacity: 0;
-      animation: reveal-rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
-      animation-timeline: view();
-      animation-range: entry 6% entry 46%;
-    }
-
-    /* Section header trio rises as one composed unit on the shared default
-       range. The per-line micro-stagger was removed as the least-earning
-       effect: barely perceptible, and a title block rising together reads more
-       composed than three lines arriving in sequence. */
-
-    /* Trust cards cascade across each row. */
-    .trust-grid .trust-card:nth-child(1) { animation-range: entry 4%  entry 40%; }
-    .trust-grid .trust-card:nth-child(2) { animation-range: entry 8%  entry 44%; }
-    .trust-grid .trust-card:nth-child(3) { animation-range: entry 12% entry 48%; }
-    .trust-grid .trust-card:nth-child(4) { animation-range: entry 8%  entry 44%; }
-    .trust-grid .trust-card:nth-child(5) { animation-range: entry 12% entry 48%; }
-    .trust-grid .trust-card:nth-child(6) { animation-range: entry 16% entry 52%; }
-
-    /* Problem statements and audience lanes cascade like the trust row. */
-    .problem-grid .problem-stat:nth-child(1) { animation-range: entry 4%  entry 40%; }
-    .problem-grid .problem-stat:nth-child(2) { animation-range: entry 8%  entry 44%; }
-    .problem-grid .problem-stat:nth-child(3) { animation-range: entry 12% entry 48%; }
-    .lane-grid .lane-card:nth-child(1) { animation-range: entry 4%  entry 40%; }
-    .lane-grid .lane-card:nth-child(2) { animation-range: entry 8%  entry 44%; }
-    .lane-grid .lane-card:nth-child(3) { animation-range: entry 12% entry 48%; }
-
-    /* Seal anatomy labels light left to right, echoing the lifecycle rail. */
-    .anno-list .seal-anno:nth-child(1) { animation-range: entry 4%  entry 36%; }
-    .anno-list .seal-anno:nth-child(2) { animation-range: entry 7%  entry 39%; }
-    .anno-list .seal-anno:nth-child(3) { animation-range: entry 10% entry 42%; }
-    .anno-list .seal-anno:nth-child(4) { animation-range: entry 13% entry 45%; }
-
-    /* Questions arrive one after another. */
-    .faq .faq-item:nth-child(1) { animation-range: entry 4%  entry 34%; }
-    .faq .faq-item:nth-child(2) { animation-range: entry 8%  entry 38%; }
-    .faq .faq-item:nth-child(3) { animation-range: entry 12% entry 42%; }
-    .faq .faq-item:nth-child(4) { animation-range: entry 16% entry 46%; }
-    .faq .faq-item:nth-child(5) { animation-range: entry 20% entry 50%; }
-
-    /* Specimen: the document, then its aside. */
-    .doc-specimen   { animation-range: entry 6%  entry 42%; }
-    .specimen-aside { animation-range: entry 12% entry 48%; }
-
-    /* The evidence lifecycle draws itself: the connector line runs left to right
-       and the six nodes light in strict sequence. Desktop rail only; the stacked
-       mobile layout uses the gentler text reveal above. */
-    @media (min-width: 920px) {
-      .lifecycle .stage-node {
-        opacity: 0;
-        transform: scale(0.6);
-        animation: pop-node linear both;
-        animation-timeline: view();
-      }
-      .lifecycle .stage-line {
-        transform: scaleX(0);
-        transform-origin: left center;
-        animation: draw-line linear both;
-        animation-timeline: view();
-      }
-
-      .lifecycle .stage:nth-child(1) .stage-node { animation-range: entry 10% entry 22%; }
-      .lifecycle .stage:nth-child(1) .stage-line { animation-range: entry 16% entry 30%; }
-      .lifecycle .stage:nth-child(2) .stage-node { animation-range: entry 22% entry 34%; }
-      .lifecycle .stage:nth-child(2) .stage-line { animation-range: entry 28% entry 42%; }
-      .lifecycle .stage:nth-child(3) .stage-node { animation-range: entry 34% entry 46%; }
-      .lifecycle .stage:nth-child(3) .stage-line { animation-range: entry 40% entry 54%; }
-      .lifecycle .stage:nth-child(4) .stage-line { animation-range: entry 52% entry 66%; }
-      .lifecycle .stage:nth-child(5) .stage-node { animation-range: entry 64% entry 76%; }
-      .lifecycle .stage:nth-child(5) .stage-line { animation-range: entry 70% entry 84%; }
-      .lifecycle .stage:nth-child(6) .stage-node { animation-range: entry 76% entry 88%; }
-
-      /* Echo the embosser once: stage 4, the cryptographic seal, presses in. */
-      .lifecycle .stage:nth-child(4) .stage-node {
-        opacity: 0;
-        transform: scale(1.12);
-        animation: stamp-node linear both;
-        animation-timeline: view();
-        animation-range: entry 46% entry 62%;
-      }
-    }
-  }
-}
-
-/* ---- Reduced motion: everything static, nothing hidden ---- */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  *, *::before, *::after {
-    animation-duration: 0.001ms !important;
-    animation-delay: 0s !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-  }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+@media print {
+  .site-header { position: static; }
+  .site-nav, .skip-link { display: none; }
+  body, .section, #contact { background: white; color: #202923; }
+  #contact .section-eyebrow, #contact .section-intro, #contact a, .contact-loc { color: #202923; }
+  .container { width: 100%; }
+  .section { padding-block: 32px; }
+  .doc { box-shadow: none; }
+  .brand-url { position: static; width: auto; height: auto; margin: 0; clip-path: none; font-size: 9px; }
 }
 
-/* ===========================================================================
-   Print: the subject's product is court paper, so the page prints like one.
-   ---------------------------------------------------------------------------
-   A clean monochrome document: no chrome, no motion, no security texture. The
-   masthead keeps the emblem, wordmark and the site URL; the lifecycle prints
-   as its six static steps; every question is forced open; sections break
-   sensibly. Colour is not relied upon, so it prints the same on any printer.
-   =========================================================================== */
+/* Security-paper engraving: static, non-interactive ink behind the content.
+   Only the decorative layer clips; focus outlines and section content do not. */
+:root {
+  --engraved-mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%232E5E4E' stroke-width='.34'%3E%3Cg stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='60' y1='34' x2='60' y2='40'/%3E%3Cline x1='38' y1='40' x2='82' y2='40'/%3E%3Cline x1='38' y1='40' x2='38' y2='47'/%3E%3Cline x1='82' y1='40' x2='82' y2='47'/%3E%3Cpath d='M31 47 Q38 55 45 47'/%3E%3Cpath d='M75 47 Q82 55 89 47'/%3E%3Cline x1='60' y1='40' x2='60' y2='56'/%3E%3Cline x1='60' y1='56' x2='47' y2='70'/%3E%3Cline x1='60' y1='56' x2='73' y2='70'/%3E%3Cline x1='47' y1='70' x2='40' y2='83'/%3E%3Cline x1='47' y1='70' x2='54' y2='83'/%3E%3Cline x1='73' y1='70' x2='66' y2='83'/%3E%3Cline x1='73' y1='70' x2='80' y2='83'/%3E%3C/g%3E%3Ccircle cx='60' cy='34' r='3.2'/%3E%3Ccircle cx='60' cy='56' r='3'/%3E%3Ccircle cx='47' cy='70' r='2.6'/%3E%3Ccircle cx='73' cy='70' r='2.6'/%3E%3Ccircle cx='40' cy='83' r='2.2'/%3E%3Ccircle cx='54' cy='83' r='2.2'/%3E%3Ccircle cx='66' cy='83' r='2.2'/%3E%3Ccircle cx='80' cy='83' r='2.2'/%3E%3C/g%3E%3C/svg%3E");
+  --engraved-mark-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%23FFFFFF' stroke-width='.34'%3E%3Cg stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='60' y1='34' x2='60' y2='40'/%3E%3Cline x1='38' y1='40' x2='82' y2='40'/%3E%3Cline x1='38' y1='40' x2='38' y2='47'/%3E%3Cline x1='82' y1='40' x2='82' y2='47'/%3E%3Cpath d='M31 47 Q38 55 45 47'/%3E%3Cpath d='M75 47 Q82 55 89 47'/%3E%3Cline x1='60' y1='40' x2='60' y2='56'/%3E%3Cline x1='60' y1='56' x2='47' y2='70'/%3E%3Cline x1='60' y1='56' x2='73' y2='70'/%3E%3Cline x1='47' y1='70' x2='40' y2='83'/%3E%3Cline x1='47' y1='70' x2='54' y2='83'/%3E%3Cline x1='73' y1='70' x2='66' y2='83'/%3E%3Cline x1='73' y1='70' x2='80' y2='83'/%3E%3C/g%3E%3Ccircle cx='60' cy='34' r='3.2'/%3E%3Ccircle cx='60' cy='56' r='3'/%3E%3Ccircle cx='47' cy='70' r='2.6'/%3E%3Ccircle cx='73' cy='70' r='2.6'/%3E%3Ccircle cx='40' cy='83' r='2.2'/%3E%3Ccircle cx='54' cy='83' r='2.2'/%3E%3Ccircle cx='66' cy='83' r='2.2'/%3E%3Ccircle cx='80' cy='83' r='2.2'/%3E%3C/g%3E%3C/svg%3E");
+  --engraved-rings: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%232E5E4E'%3E%3Cg stroke-width='.17'%3E%3Cpath id='ga' d='M110 60 111.28 61.34 112.02 62.73 111.93 64.09 111.01 65.36 109.57 66.53 108.11 67.62 107.11 68.73 106.86 69.96 107.36 71.37 108.3 72.94 109.18 74.57 109.54 76.1 109.1 77.39 107.89 78.38 106.19 79.13 104.5 79.81 103.24 80.62 102.69 81.75 102.8 83.24 103.3 85 103.73 86.8 103.69 88.37 102.93 89.51 101.5 90.15 99.67 90.44 97.85 90.65 96.43 91.11 95.6 92.06 95.33 93.53 95.36 95.36 95.31 97.21 94.86 98.71 93.83 99.61 92.28 99.86 90.44 99.67 88.63 99.4 87.14 99.48 86.09 100.18 85.45 101.53 85 103.3 84.47 105.08 83.65 106.41 82.43 107.02 80.86 106.86 79.13 106.19 77.45 105.47 75.99 105.16 74.8 105.56 73.83 106.7 72.94 108.3 71.97 109.88 70.83 110.95 69.49 111.22 68.02 110.66 66.53 109.57 65.09 108.44 63.76 107.76 62.51 107.84 61.27 108.69 60 110 58.66 111.28 57.27 112.02 55.91 111.93 54.64 111.01 53.47 109.57 52.38 108.11 51.27 107.11 50.04 106.86 48.63 107.36 47.06 108.3 45.43 109.18 43.9 109.54 42.61 109.1 41.62 107.89 40.87 106.19 40.19 104.5 39.38 103.24 38.25 102.69 36.76 102.8 35 103.3 33.2 103.73 31.63 103.69 30.49 102.93 29.85 101.5 29.56 99.67 29.35 97.85 28.89 96.43 27.94 95.6 26.47 95.33 24.64 95.36 22.79 95.31 21.29 94.86 20.39 93.83 20.14 92.28 20.33 90.44 20.6 88.63 20.52 87.14 19.82 86.09 18.47 85.45 16.7 85 14.92 84.47 13.59 83.65 12.98 82.43 13.14 80.86 13.81 79.13 14.53 77.45 14.84 75.99 14.44 74.8 13.3 73.83 11.7 72.94 10.12 71.97 9.05 70.83 8.78 69.49 9.34 68.02 10.43 66.53 11.56 65.09 12.24 63.76 12.16 62.51 11.31 61.27 10 60 8.72 58.66 7.98 57.27 8.07 55.91 8.99 54.64 10.43 53.47 11.89 52.38 12.89 51.27 13.14 50.04 12.64 48.63 11.7 47.06 10.82 45.43 10.46 43.9 10.9 42.61 12.11 41.62 13.81 40.87 15.5 40.19 16.76 39.38 17.31 38.25 17.2 36.76 16.7 35 16.27 33.2 16.31 31.63 17.07 30.49 18.5 29.85 20.33 29.56 22.15 29.35 23.57 28.89 24.4 27.94 24.67 26.47 24.64 24.64 24.69 22.79 25.14 21.29 26.17 20.39 27.72 20.14 29.56 20.33 31.37 20.6 32.86 20.52 33.91 19.82 34.55 18.47 35 16.7 35.53 14.92 36.35 13.59 37.57 12.98 39.14 13.14 40.87 13.81 42.55 14.53 44.01 14.84 45.2 14.44 46.17 13.3 47.06 11.7 48.03 10.12 49.17 9.05 50.51 8.78 51.98 9.34 53.47 10.43 54.91 11.56 56.24 12.24 57.49 12.16 58.73 11.31 60 10 61.34 8.72 62.73 7.98 64.09 8.07 65.36 8.99 66.53 10.43 67.62 11.89 68.73 12.89 69.96 13.14 71.37 12.64 72.94 11.7 74.57 10.82 76.1 10.46 77.39 10.9 78.38 12.11 79.13 13.81 79.81 15.5 80.62 16.76 81.75 17.31 83.24 17.2 85 16.7 86.8 16.27 88.37 16.31 89.51 17.07 90.15 18.5 90.44 20.33 90.65 22.15 91.11 23.57 92.06 24.4 93.53 24.67 95.36 24.64 97.21 24.69 98.71 25.14 99.61 26.17 99.86 27.72 99.67 29.56 99.4 31.37 99.48 32.86 100.18 33.91 101.53 34.55 103.3 35 105.08 35.53 106.41 36.35 107.02 37.57 106.86 39.14 106.19 40.87 105.47 42.55 105.16 44.01 105.56 45.2 106.7 46.17 108.3 47.06 109.88 48.03 110.95 49.17 111.22 50.51 110.66 51.98 109.57 53.47 108.44 54.91 107.76 56.24 107.84 57.49 108.69 58.73Z'/%3E%3Cuse href='%23ga' transform='rotate(2.5 60 60)'/%3E%3Cuse href='%23ga' transform='rotate(5 60 60)'/%3E%3Cuse href='%23ga' transform='rotate(7.5 60 60)'/%3E%3Cuse href='%23ga' transform='rotate(10 60 60)'/%3E%3Cuse href='%23ga' transform='rotate(12.5 60 60)'/%3E%3C/g%3E%3Cg stroke-width='.14'%3E%3Cpath id='gb' d='M99.5 60 100.66 61.01 100.91 62.04 100.04 63 98.66 63.87 97.74 64.73 97.9 65.71 98.9 66.86 99.87 68.06 99.94 69.11 98.91 69.91 97.4 70.52 96.35 71.21 96.33 72.21 97.12 73.51 97.86 74.86 97.75 75.91 96.6 76.51 95 76.86 93.85 77.35 93.66 78.33 94.21 79.75 94.71 81.21 94.41 82.22 93.17 82.62 91.54 82.68 90.32 82.97 89.97 83.9 90.26 85.39 90.5 86.91 90.03 87.86 88.74 88.03 87.13 87.81 85.87 87.88 85.36 88.74 85.39 90.26 85.36 91.8 84.73 92.65 83.44 92.6 81.88 92.1 80.64 91.95 79.99 92.7 79.75 94.21 79.45 95.72 78.69 96.45 77.42 96.17 75.98 95.41 74.78 95.05 74 95.68 73.51 97.12 72.95 98.55 72.07 99.14 70.87 98.65 69.59 97.65 68.46 97.08 67.59 97.57 66.86 98.9 66.06 100.22 65.09 100.64 64 99.95 62.9 98.74 61.9 97.99 60.96 98.32 60 99.5 58.99 100.66 57.96 100.91 57 100.04 56.13 98.66 55.27 97.74 54.29 97.9 53.14 98.9 51.94 99.87 50.89 99.94 50.09 98.91 49.48 97.4 48.79 96.35 47.79 96.33 46.49 97.12 45.14 97.86 44.09 97.75 43.49 96.6 43.14 95 42.65 93.85 41.67 93.66 40.25 94.21 38.79 94.71 37.78 94.41 37.38 93.17 37.32 91.54 37.03 90.32 36.1 89.97 34.61 90.26 33.09 90.5 32.14 90.03 31.97 88.74 32.19 87.13 32.12 85.87 31.26 85.36 29.74 85.39 28.2 85.36 27.35 84.73 27.4 83.44 27.9 81.88 28.05 80.64 27.3 79.99 25.79 79.75 24.28 79.45 23.55 78.69 23.83 77.42 24.59 75.98 24.95 74.78 24.32 74 22.88 73.51 21.45 72.95 20.86 72.07 21.35 70.87 22.35 69.59 22.92 68.46 22.43 67.59 21.1 66.86 19.78 66.06 19.36 65.09 20.05 64 21.26 62.9 22.01 61.9 21.68 60.96 20.5 60 19.34 58.99 19.09 57.96 19.96 57 21.34 56.13 22.26 55.27 22.1 54.29 21.1 53.14 20.13 51.94 20.06 50.89 21.09 50.09 22.6 49.48 23.65 48.79 23.67 47.79 22.88 46.49 22.14 45.14 22.25 44.09 23.4 43.49 25 43.14 26.15 42.65 26.34 41.67 25.79 40.25 25.29 38.79 25.59 37.78 26.83 37.38 28.46 37.32 29.68 37.03 30.03 36.1 29.74 34.61 29.5 33.09 29.97 32.14 31.26 31.97 32.87 32.19 34.13 32.12 34.64 31.26 34.61 29.74 34.64 28.2 35.27 27.35 36.56 27.4 38.12 27.9 39.36 28.05 40.01 27.3 40.25 25.79 40.55 24.28 41.31 23.55 42.58 23.83 44.02 24.59 45.22 24.95 46 24.32 46.49 22.88 47.05 21.45 47.93 20.86 49.13 21.35 50.41 22.35 51.54 22.92 52.41 22.43 53.14 21.1 53.94 19.78 54.91 19.36 56 20.05 57.1 21.26 58.1 22.01 59.04 21.68 60 20.5 61.01 19.34 62.04 19.09 63 19.96 63.87 21.34 64.73 22.26 65.71 22.1 66.86 21.1 68.06 20.13 69.11 20.06 69.91 21.09 70.52 22.6 71.21 23.65 72.21 23.67 73.51 22.88 74.86 22.14 75.91 22.25 76.51 23.4 76.86 25 77.35 26.15 78.33 26.34 79.75 25.79 81.21 25.29 82.22 25.59 82.62 26.83 82.68 28.46 82.97 29.68 83.9 30.03 85.39 29.74 86.91 29.5 87.86 29.97 88.03 31.26 87.81 32.87 87.88 34.13 88.74 34.64 90.26 34.61 91.8 34.64 92.65 35.27 92.6 36.56 92.1 38.12 91.95 39.36 92.7 40.01 94.21 40.25 95.72 40.55 96.45 41.31 96.17 42.58 95.41 44.02 95.05 45.22 95.68 46 97.12 46.49 98.55 47.05 99.14 47.93 98.65 49.13 97.65 50.41 97.08 51.54 97.57 52.41 98.9 53.14 100.22 53.94 100.64 54.91 99.95 56 98.74 57.1 97.99 58.1 98.32 59.04Z'/%3E%3Cuse href='%23gb' transform='rotate(2.5 60 60)'/%3E%3Cuse href='%23gb' transform='rotate(5 60 60)'/%3E%3Cuse href='%23gb' transform='rotate(7.5 60 60)'/%3E%3C/g%3E%3Cg stroke-width='.3'%3E%3Ccircle cx='60' cy='60' r='53.6'/%3E%3Ccircle cx='60' cy='60' r='59.4'/%3E%3Ccircle cx='60' cy='60' r='45' stroke-dasharray='.9 1.4'/%3E%3C/g%3E%3Ccircle cx='60' cy='60' r='56.4' stroke-width='2' pathLength='360' stroke-dasharray='.26 2.74'/%3E%3Ccircle cx='60' cy='60' r='56.9' stroke-width='2.6' pathLength='360' stroke-dasharray='.42 29.58'/%3E%3C/g%3E%3C/svg%3E");
+  --engraved-rings-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%23FFFFFF'%3E%3Cg stroke-width='.17'%3E%3Cpath id='wa' d='M110 60 111.28 61.34 112.02 62.73 111.93 64.09 111.01 65.36 109.57 66.53 108.11 67.62 107.11 68.73 106.86 69.96 107.36 71.37 108.3 72.94 109.18 74.57 109.54 76.1 109.1 77.39 107.89 78.38 106.19 79.13 104.5 79.81 103.24 80.62 102.69 81.75 102.8 83.24 103.3 85 103.73 86.8 103.69 88.37 102.93 89.51 101.5 90.15 99.67 90.44 97.85 90.65 96.43 91.11 95.6 92.06 95.33 93.53 95.36 95.36 95.31 97.21 94.86 98.71 93.83 99.61 92.28 99.86 90.44 99.67 88.63 99.4 87.14 99.48 86.09 100.18 85.45 101.53 85 103.3 84.47 105.08 83.65 106.41 82.43 107.02 80.86 106.86 79.13 106.19 77.45 105.47 75.99 105.16 74.8 105.56 73.83 106.7 72.94 108.3 71.97 109.88 70.83 110.95 69.49 111.22 68.02 110.66 66.53 109.57 65.09 108.44 63.76 107.76 62.51 107.84 61.27 108.69 60 110 58.66 111.28 57.27 112.02 55.91 111.93 54.64 111.01 53.47 109.57 52.38 108.11 51.27 107.11 50.04 106.86 48.63 107.36 47.06 108.3 45.43 109.18 43.9 109.54 42.61 109.1 41.62 107.89 40.87 106.19 40.19 104.5 39.38 103.24 38.25 102.69 36.76 102.8 35 103.3 33.2 103.73 31.63 103.69 30.49 102.93 29.85 101.5 29.56 99.67 29.35 97.85 28.89 96.43 27.94 95.6 26.47 95.33 24.64 95.36 22.79 95.31 21.29 94.86 20.39 93.83 20.14 92.28 20.33 90.44 20.6 88.63 20.52 87.14 19.82 86.09 18.47 85.45 16.7 85 14.92 84.47 13.59 83.65 12.98 82.43 13.14 80.86 13.81 79.13 14.53 77.45 14.84 75.99 14.44 74.8 13.3 73.83 11.7 72.94 10.12 71.97 9.05 70.83 8.78 69.49 9.34 68.02 10.43 66.53 11.56 65.09 12.24 63.76 12.16 62.51 11.31 61.27 10 60 8.72 58.66 7.98 57.27 8.07 55.91 8.99 54.64 10.43 53.47 11.89 52.38 12.89 51.27 13.14 50.04 12.64 48.63 11.7 47.06 10.82 45.43 10.46 43.9 10.9 42.61 12.11 41.62 13.81 40.87 15.5 40.19 16.76 39.38 17.31 38.25 17.2 36.76 16.7 35 16.27 33.2 16.31 31.63 17.07 30.49 18.5 29.85 20.33 29.56 22.15 29.35 23.57 28.89 24.4 27.94 24.67 26.47 24.64 24.64 24.69 22.79 25.14 21.29 26.17 20.39 27.72 20.14 29.56 20.33 31.37 20.6 32.86 20.52 33.91 19.82 34.55 18.47 35 16.7 35.53 14.92 36.35 13.59 37.57 12.98 39.14 13.14 40.87 13.81 42.55 14.53 44.01 14.84 45.2 14.44 46.17 13.3 47.06 11.7 48.03 10.12 49.17 9.05 50.51 8.78 51.98 9.34 53.47 10.43 54.91 11.56 56.24 12.24 57.49 12.16 58.73 11.31 60 10 61.34 8.72 62.73 7.98 64.09 8.07 65.36 8.99 66.53 10.43 67.62 11.89 68.73 12.89 69.96 13.14 71.37 12.64 72.94 11.7 74.57 10.82 76.1 10.46 77.39 10.9 78.38 12.11 79.13 13.81 79.81 15.5 80.62 16.76 81.75 17.31 83.24 17.2 85 16.7 86.8 16.27 88.37 16.31 89.51 17.07 90.15 18.5 90.44 20.33 90.65 22.15 91.11 23.57 92.06 24.4 93.53 24.67 95.36 24.64 97.21 24.69 98.71 25.14 99.61 26.17 99.86 27.72 99.67 29.56 99.4 31.37 99.48 32.86 100.18 33.91 101.53 34.55 103.3 35 105.08 35.53 106.41 36.35 107.02 37.57 106.86 39.14 106.19 40.87 105.47 42.55 105.16 44.01 105.56 45.2 106.7 46.17 108.3 47.06 109.88 48.03 110.95 49.17 111.22 50.51 110.66 51.98 109.57 53.47 108.44 54.91 107.76 56.24 107.84 57.49 108.69 58.73Z'/%3E%3Cuse href='%23wa' transform='rotate(2.5 60 60)'/%3E%3Cuse href='%23wa' transform='rotate(5 60 60)'/%3E%3Cuse href='%23wa' transform='rotate(7.5 60 60)'/%3E%3Cuse href='%23wa' transform='rotate(10 60 60)'/%3E%3Cuse href='%23wa' transform='rotate(12.5 60 60)'/%3E%3C/g%3E%3Cg stroke-width='.14'%3E%3Cpath id='wb' d='M99.5 60 100.66 61.01 100.91 62.04 100.04 63 98.66 63.87 97.74 64.73 97.9 65.71 98.9 66.86 99.87 68.06 99.94 69.11 98.91 69.91 97.4 70.52 96.35 71.21 96.33 72.21 97.12 73.51 97.86 74.86 97.75 75.91 96.6 76.51 95 76.86 93.85 77.35 93.66 78.33 94.21 79.75 94.71 81.21 94.41 82.22 93.17 82.62 91.54 82.68 90.32 82.97 89.97 83.9 90.26 85.39 90.5 86.91 90.03 87.86 88.74 88.03 87.13 87.81 85.87 87.88 85.36 88.74 85.39 90.26 85.36 91.8 84.73 92.65 83.44 92.6 81.88 92.1 80.64 91.95 79.99 92.7 79.75 94.21 79.45 95.72 78.69 96.45 77.42 96.17 75.98 95.41 74.78 95.05 74 95.68 73.51 97.12 72.95 98.55 72.07 99.14 70.87 98.65 69.59 97.65 68.46 97.08 67.59 97.57 66.86 98.9 66.06 100.22 65.09 100.64 64 99.95 62.9 98.74 61.9 97.99 60.96 98.32 60 99.5 58.99 100.66 57.96 100.91 57 100.04 56.13 98.66 55.27 97.74 54.29 97.9 53.14 98.9 51.94 99.87 50.89 99.94 50.09 98.91 49.48 97.4 48.79 96.35 47.79 96.33 46.49 97.12 45.14 97.86 44.09 97.75 43.49 96.6 43.14 95 42.65 93.85 41.67 93.66 40.25 94.21 38.79 94.71 37.78 94.41 37.38 93.17 37.32 91.54 37.03 90.32 36.1 89.97 34.61 90.26 33.09 90.5 32.14 90.03 31.97 88.74 32.19 87.13 32.12 85.87 31.26 85.36 29.74 85.39 28.2 85.36 27.35 84.73 27.4 83.44 27.9 81.88 28.05 80.64 27.3 79.99 25.79 79.75 24.28 79.45 23.55 78.69 23.83 77.42 24.59 75.98 24.95 74.78 24.32 74 22.88 73.51 21.45 72.95 20.86 72.07 21.35 70.87 22.35 69.59 22.92 68.46 22.43 67.59 21.1 66.86 19.78 66.06 19.36 65.09 20.05 64 21.26 62.9 22.01 61.9 21.68 60.96 20.5 60 19.34 58.99 19.09 57.96 19.96 57 21.34 56.13 22.26 55.27 22.1 54.29 21.1 53.14 20.13 51.94 20.06 50.89 21.09 50.09 22.6 49.48 23.65 48.79 23.67 47.79 22.88 46.49 22.14 45.14 22.25 44.09 23.4 43.49 25 43.14 26.15 42.65 26.34 41.67 25.79 40.25 25.29 38.79 25.59 37.78 26.83 37.38 28.46 37.32 29.68 37.03 30.03 36.1 29.74 34.61 29.5 33.09 29.97 32.14 31.26 31.97 32.87 32.19 34.13 32.12 34.64 31.26 34.61 29.74 34.64 28.2 35.27 27.35 36.56 27.4 38.12 27.9 39.36 28.05 40.01 27.3 40.25 25.79 40.55 24.28 41.31 23.55 42.58 23.83 44.02 24.59 45.22 24.95 46 24.32 46.49 22.88 47.05 21.45 47.93 20.86 49.13 21.35 50.41 22.35 51.54 22.92 52.41 22.43 53.14 21.1 53.94 19.78 54.91 19.36 56 20.05 57.1 21.26 58.1 22.01 59.04 21.68 60 20.5 61.01 19.34 62.04 19.09 63 19.96 63.87 21.34 64.73 22.26 65.71 22.1 66.86 21.1 68.06 20.13 69.11 20.06 69.91 21.09 70.52 22.6 71.21 23.65 72.21 23.67 73.51 22.88 74.86 22.14 75.91 22.25 76.51 23.4 76.86 25 77.35 26.15 78.33 26.34 79.75 25.79 81.21 25.29 82.22 25.59 82.62 26.83 82.68 28.46 82.97 29.68 83.9 30.03 85.39 29.74 86.91 29.5 87.86 29.97 88.03 31.26 87.81 32.87 87.88 34.13 88.74 34.64 90.26 34.61 91.8 34.64 92.65 35.27 92.6 36.56 92.1 38.12 91.95 39.36 92.7 40.01 94.21 40.25 95.72 40.55 96.45 41.31 96.17 42.58 95.41 44.02 95.05 45.22 95.68 46 97.12 46.49 98.55 47.05 99.14 47.93 98.65 49.13 97.65 50.41 97.08 51.54 97.57 52.41 98.9 53.14 100.22 53.94 100.64 54.91 99.95 56 98.74 57.1 97.99 58.1 98.32 59.04Z'/%3E%3Cuse href='%23wb' transform='rotate(2.5 60 60)'/%3E%3Cuse href='%23wb' transform='rotate(5 60 60)'/%3E%3Cuse href='%23wb' transform='rotate(7.5 60 60)'/%3E%3C/g%3E%3Cg stroke-width='.3'%3E%3Ccircle cx='60' cy='60' r='53.6'/%3E%3Ccircle cx='60' cy='60' r='59.4'/%3E%3Ccircle cx='60' cy='60' r='45' stroke-dasharray='.9 1.4'/%3E%3C/g%3E%3Ccircle cx='60' cy='60' r='56.4' stroke-width='2' pathLength='360' stroke-dasharray='.26 2.74'/%3E%3Ccircle cx='60' cy='60' r='56.9' stroke-width='2.6' pathLength='360' stroke-dasharray='.42 29.58'/%3E%3C/g%3E%3C/svg%3E");
+  --engraved-ledger: url("data:image/svg+xml,%3Csvg xmlns=%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22 width=%2296%22 height=%2232%22 viewBox=%220 0 96 32%22%3E%3Cpath d=%22M0 31.5H96M16 0V32M12 15.5H20%22 fill=%22none%22 stroke=%22%232E5E4E%22 stroke-width=%22.9%22%2F%3E%3C%2Fsvg%3E");
+}
+.hero, .section { position: relative; isolation: isolate; }
+.engraving {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  opacity: .2;
+}
+.engraving-mark::before, .engraving-mark::after, .engraving-rings::before {
+  content: "";
+  position: absolute;
+  width: 760px;
+  aspect-ratio: 1;
+  background: center / contain no-repeat;
+}
+/* The rosette turns, a revolution every few minutes; the mark at its centre floats. */
+.engraving-mark::before, .engraving-rings::before {
+  background-image: var(--engraved-rings);
+  animation: engrave-turn 220s linear infinite;
+}
+.engraving-mark::after {
+  background-image: var(--engraved-mark);
+  animation: engrave-float 14s ease-in-out infinite alternate;
+}
+.hero .engraving-mark::before, .hero .engraving-mark::after { width: 900px; right: -180px; top: -220px; }
+.hero .engraving-mark::before { opacity: .7; }
+#standard .engraving-rings::before { left: -410px; bottom: -340px; }
+#trust .engraving-rings::before { right: -390px; top: -240px; animation-direction: reverse; animation-duration: 260s; }
+#proof .engraving-rings::before { right: -420px; bottom: -280px; animation-duration: 300s; }
+.engraving-ledger {
+  opacity: .13;
+  mask-image: linear-gradient(90deg, #000, rgba(0,0,0,.35) 26%, rgba(0,0,0,.35) 74%, #000);
+}
+/* One tile larger than its section, so a one tile drift loops without a seam. */
+.engraving-ledger::before {
+  content: "";
+  position: absolute;
+  inset: -32px 0 0 -96px;
+  background: var(--engraved-ledger) left top / 96px 32px repeat;
+  animation: engrave-drift 60s linear infinite;
+}
+#process .engraving-ledger { opacity: .13; }
+#trust .engraving { opacity: .14; }
+#questions .engraving-ledger { mask-image: linear-gradient(90deg, #000, transparent 24%); }
+#contact .engraving { opacity: .15; }
+#contact .engraving-mark::before, #contact .engraving-mark::after { width: 720px; right: -160px; top: -220px; }
+#contact .engraving-mark::before { background-image: var(--engraved-rings-light); animation-direction: reverse; opacity: .55; }
+#contact .engraving-mark::after { background-image: var(--engraved-mark-light); }
+@keyframes engrave-turn { to { transform: rotate(1turn); } }
+@keyframes engrave-float { from { transform: translateY(-6px); } to { transform: translateY(6px); } }
+@keyframes engrave-drift { to { transform: translate(96px, 32px); } }
+/* Small registration corners sit inside the existing panel padding. */
+.hero-visual, .specimen, .pair-grid .lane-card, .lane-grid .lane-card { position: relative; }
+.hero-visual::before, .hero-visual::after,
+.specimen::before, .specimen::after,
+.pair-grid .lane-card::before, .pair-grid .lane-card::after,
+.lane-grid .lane-card::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  pointer-events: none;
+  border-color: var(--green);
+  border-style: solid;
+  opacity: .4;
+}
+.hero-visual::before, .specimen::before, .pair-grid .lane-card::before {
+  top: 9px; left: 9px; border-width: 1px 0 0 1px;
+}
+.hero-visual::after, .specimen::after, .pair-grid .lane-card::after {
+  bottom: 9px; right: 9px; border-width: 0 1px 1px 0;
+}
+.lane-grid .lane-card::after { top: 9px; right: 0; border-width: 1px 1px 0 0; }
+@media (max-width: 800px) {
+  .hero .engraving-mark::before, .hero .engraving-mark::after { width: 680px; right: -300px; top: -90px; }
+  .hero .engraving { opacity: .13; }
+  .engraving-rings::before { width: 560px; }
+  #standard .engraving-rings::before { left: -380px; bottom: -220px; }
+  #trust .engraving-rings::before { right: -380px; top: -160px; }
+  #proof .engraving-rings::before { right: -380px; bottom: -200px; }
+  .engraving-ledger { mask-image: linear-gradient(90deg, #000, transparent 48px, transparent calc(100% - 48px), #000); }
+  #questions .engraving-ledger { mask-image: linear-gradient(90deg, #000, transparent 48px); }
+  #contact .engraving-mark::before, #contact .engraving-mark::after { width: 600px; right: -350px; top: -120px; }
+}
 @media print {
-  @page { margin: 16mm; }
+  .engraving,
+  .hero-visual::before, .hero-visual::after,
+  .specimen::before, .specimen::after,
+  .pair-grid .lane-card::before, .pair-grid .lane-card::after,
+  .lane-grid .lane-card::after { display: none; }
+}
 
-  /* Neutralise motion and the scroll-reveal opacity so nothing prints hidden. */
-  *, *::before, *::after {
-    animation: none !important;
-    transition: none !important;
-    opacity: 1 !important;
-    transform: none !important;
-    translate: none !important;
-    box-shadow: none !important;
-  }
-
-  html { scroll-behavior: auto; }
-  body {
-    background: #fff;
-    color: var(--ink);
-    border-top: none;
-    font-size: 11pt;
-    line-height: 1.5;
-  }
-
-  /* Hide interactive and purely decorative furniture. */
-  .hero-actions,
-  .hero-visual,
-  .hero-chip,
-  .hv-glow,
-  .skip-link,
-  .site-nav,
-  .microprint,
-  .faq-icon { display: none !important; }
-
-  /* Masthead: emblem and wordmark stay; the URL prints beside them. */
-  .site-header {
-    position: static;
-    background: none;
-    backdrop-filter: none;
-    border-bottom: 1px solid var(--line);
-  }
-  .brand-url {
-    display: inline;
-    margin-left: 12px;
-    font-family: var(--mono);
-    font-size: 8.5pt;
-    color: var(--slate);
-  }
-
-  /* Print one clean headline, not the stacked cross-fade phrases. */
-  .hero-cycle .cycle { display: none; }
-  .hero-cycle .vh {
-    position: static;
-    width: auto;
-    height: auto;
-    margin: 0;
-    clip: auto;
-    clip-path: none;
-    overflow: visible;
-    white-space: normal;
-  }
-
-  /* Flatten fills; keep hairlines as document rules. */
-  .hero { background: none; border-bottom: 1px solid var(--line); padding: 22px 0 20px; }
-  .section { background: none; padding: 22px 0; }
-  .section-alt { background: none; border-block: none; border-top: 1px solid var(--line); }
-  .doc, .trust-card, .lane-card, .certs,
-  .doc-seal, .doc-cert { background: none; border: 1px solid var(--line); }
-  .doc-tag, .badge { background: none; border: 1px solid var(--gold); color: var(--gold); }
-
-  /* Nodes print as outlined circles so the numbers survive a mono printer. */
-  .stage-node, .stage-node-seal {
-    background: none !important;
-    color: var(--ink) !important;
-    border: 1.5px solid var(--green);
-  }
-  .stage-node-seal { border-color: var(--gold); }
-
-  /* The evidence lifecycle prints as six stacked static steps. */
-  .lifecycle { display: block; }
-  .stage { position: relative; padding: 0 0 14px 60px; }
-  .stage-top { position: absolute; left: 0; top: 0; height: auto; margin: 0; display: block; }
-  .stage-line { display: none; }
-  .stage h3, .stage p { padding-right: 0; min-height: 0; }
-
-  /* Force every answer open on the printed page. The modern engine hides a
-     closed disclosure through the ::details-content pseudo, so reveal both. */
-  .faq-a { display: block !important; }
-  .faq-item::details-content { content-visibility: visible !important; }
-  .faq-item summary { padding: 14px 0 6px; }
-
-  /* Keep headings with their content and never split a small unit; let the
-     larger sections flow, so no page is left mostly blank. */
-  h1, h2, h3, .section-eyebrow, .seal-legend-cap { break-after: avoid; }
-  .problem-stat, .stage, .trust-card, .lane-card, .certs,
-  .doc-specimen, .seal-anno, .faq-item { break-inside: avoid; }
-
-  /* Links read as plain text; the specimen link keeps its filename. */
-  a { color: var(--ink); text-decoration: none; }
-  .contact-email a { text-decoration: underline; }
-  .specimen-link a { text-decoration: underline; }
-  .specimen-link a::after { content: " (sample-certified-transcript.pdf)"; font-family: var(--mono); font-size: 8pt; color: var(--slate); }
-
-  .footer-nav { display: none; }
-  .site-footer { padding: 20px 0; background: none; border-top: 1px solid var(--line); }
+/* Hero record: a specimen that writes itself, hashes each line, then seals.
+   Under reduced motion every part is simply present. */
+.doc-title { display: grid; gap: 4px; min-width: 0; }
+.doc-ref { font: 500 10px/1.5 var(--mono); color: var(--muted); }
+.doc-hero .doc-tag { display: inline-flex; align-items: center; gap: 6px; }
+.doc-hero .doc-tag svg { width: 11px; height: 11px; }
+.doc-script { list-style: none; margin: 0; padding: 24px 24px 20px; display: grid; gap: 14px; position: relative; overflow: hidden; }
+.doc-script li { display: grid; grid-template-columns: 16px 52px 20px minmax(0, 1fr) auto; column-gap: 10px; align-items: baseline; font-size: 13px; line-height: 1.55; }
+.doc-script .ln, .doc-script .ts { font: 500 10px/1.55 var(--mono); color: var(--muted); }
+.doc-script .who { justify-self: start; width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; font: 600 9px/1 var(--sans); color: var(--green); background: var(--wash); border: 1px solid var(--line); transform: translateY(3px); }
+.doc-script .who.b { background: var(--surface); }
+.doc-script .say { color: var(--ink); min-width: 0; }
+.redact { display: inline-block; width: var(--w, 6ch); height: .9em; vertical-align: -.1em; background: var(--ink); border-radius: 1px; }
+.doc-script .lh { align-self: center; font: 500 9.5px/1.4 var(--mono); color: var(--green); background: #eef4f0; border: 1px solid #d5e3da; border-radius: 3px; padding: 1px 5px; }
+.seal.seal-live { width: 72px; height: 72px; border: 0; display: grid; place-items: center; }
+.seal.seal-live svg { grid-area: 1 / 1; }
+.seal.seal-live .seal-ring { width: 72px; height: 72px; animation: engrave-turn 48s linear infinite; }
+.seal.seal-live .seal-mark { width: 30px; height: 30px; }
+.seal-note { display: block; margin-top: 2px; font-size: 11px; color: var(--muted); }
+.chip-dot { position: relative; }
+.chip-dot::after { content: ""; position: absolute; inset: -3px; border-radius: 50%; border: 1px solid var(--green); opacity: 0; animation: rec-pulse 2.8s ease-out 3.2s infinite; }
+.doc-script li { animation: rec-line .55s cubic-bezier(.2, .7, .2, 1) both; animation-delay: calc(.35s + var(--i) * .28s); }
+.doc-script .redact { transform-origin: left center; animation: rec-redact .45s ease-out both; animation-delay: calc(.6s + var(--i) * .28s); }
+.doc-script .lh { animation: rec-hash .6s ease-out both; animation-delay: calc(1.5s + var(--i) * .16s); }
+.seal.seal-live { animation: rec-seal .8s cubic-bezier(.2, .9, .25, 1.15) both; animation-delay: 2.3s; }
+.doc-script::after { content: ""; position: absolute; left: 0; right: 0; top: -32px; height: 32px; background: linear-gradient(rgb(46 94 78 / 0%), rgb(46 94 78 / 6%)); border-bottom: 1px solid rgb(46 94 78 / 35%); opacity: 0; pointer-events: none; animation: rec-sweep 9s ease-in-out 3.4s infinite; }
+@keyframes rec-line { from { opacity: 0; transform: translateY(6px); } }
+@keyframes rec-redact { from { transform: scaleX(0); } }
+@keyframes rec-hash { from { opacity: 0; color: white; background: var(--green); } 45% { opacity: 1; color: white; background: var(--green); } }
+@keyframes rec-seal { from { opacity: 0; transform: scale(1.35) rotate(-12deg); } }
+@keyframes rec-pulse { 0% { opacity: .6; transform: scale(.6); } 70%, 100% { opacity: 0; transform: scale(1.9); } }
+@keyframes rec-sweep { 0% { top: -32px; opacity: 0; } 4% { opacity: 1; } 30% { top: 100%; opacity: 1; } 34%, 100% { top: 100%; opacity: 0; } }
+@media (max-width: 600px) {
+  .doc-script { padding: 20px 16px 16px; gap: 12px; }
+  .doc-script li { grid-template-columns: 14px 18px minmax(0, 1fr) auto; column-gap: 8px; font-size: 12.5px; }
+  .doc-script .ts, .doc-ref .pg { display: none; }
+  .seal.seal-live, .seal.seal-live .seal-ring { width: 60px; height: 60px; }
+  .seal.seal-live .seal-mark { width: 26px; height: 26px; }
 }
