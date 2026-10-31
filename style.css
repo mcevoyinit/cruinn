@@ -288,6 +288,24 @@ code { font-family: var(--mono); font-size: 10px; color: var(--muted); overflow-
   .footer-nav { grid-template-columns: repeat(3, 1fr); gap: 12px; }
   .footer-base { flex-direction: column; gap: 16px; margin-top: 32px; }
 }
+
+/* Content rises into place as it scrolls into view. Browsers without
+   scroll timelines simply show everything, nothing is hidden. */
+@supports (animation-timeline: view()) {
+  .section-heading, .problem-stat, .pair-grid .lane-card, .lane-grid .lane-card,
+  .trust-card, .stage, .specimen, .certs, .faq-item, .contact-email {
+    animation: rise-in linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 28%;
+  }
+  .problem-stat:nth-child(2), .lane-card:nth-child(2), .trust-card:nth-child(3n+2), .stage:nth-child(2n) { animation-range: entry 6% cover 32%; }
+  .problem-stat:nth-child(3), .lane-card:nth-child(3), .trust-card:nth-child(3n) { animation-range: entry 12% cover 36%; }
+  .stage-node { animation: node-pop linear both; animation-timeline: view(); animation-range: entry 20% cover 34%; }
+}
+@keyframes rise-in { from { opacity: 0; transform: translateY(64px) scale(.96); } }
+@keyframes node-pop { from { transform: scale(.3); background: var(--green); color: white; } }
+.problem-stat, .lane-card, .trust-card { transition: transform .25s ease, box-shadow .25s ease; }
+.problem-stat:hover, .lane-card:hover, .trust-card:hover { transform: translateY(-6px); box-shadow: 0 14px 30px rgb(32 41 35 / 10%); }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -320,7 +338,7 @@ code { font-family: var(--mono); font-size: 10px; color: var(--muted); overflow-
   overflow: hidden;
   pointer-events: none;
   user-select: none;
-  opacity: .2;
+  opacity: .28;
 }
 .engraving-mark::before, .engraving-mark::after, .engraving-rings::before {
   content: "";
@@ -332,19 +350,19 @@ code { font-family: var(--mono); font-size: 10px; color: var(--muted); overflow-
 /* The rosette turns, a revolution every few minutes; the mark at its centre floats. */
 .engraving-mark::before, .engraving-rings::before {
   background-image: var(--engraved-rings);
-  animation: engrave-turn 220s linear infinite;
+  animation: engrave-turn 75s linear infinite;
 }
 .engraving-mark::after {
   background-image: var(--engraved-mark);
-  animation: engrave-float 14s ease-in-out infinite alternate;
+  animation: engrave-float 6s ease-in-out infinite alternate;
 }
 .hero .engraving-mark::before, .hero .engraving-mark::after { width: 900px; right: -180px; top: -220px; }
 .hero .engraving-mark::before { opacity: .7; }
 #standard .engraving-rings::before { left: -410px; bottom: -340px; }
-#trust .engraving-rings::before { right: -390px; top: -240px; animation-direction: reverse; animation-duration: 260s; }
-#proof .engraving-rings::before { right: -420px; bottom: -280px; animation-duration: 300s; }
+#trust .engraving-rings::before { right: -390px; top: -240px; animation-direction: reverse; animation-duration: 90s; }
+#proof .engraving-rings::before { right: -420px; bottom: -280px; animation-duration: 100s; }
 .engraving-ledger {
-  opacity: .13;
+  opacity: .18;
   mask-image: linear-gradient(90deg, #000, rgba(0,0,0,.35) 26%, rgba(0,0,0,.35) 74%, #000);
 }
 /* One tile larger than its section, so a one tile drift loops without a seam. */
@@ -353,9 +371,9 @@ code { font-family: var(--mono); font-size: 10px; color: var(--muted); overflow-
   position: absolute;
   inset: -32px 0 0 -96px;
   background: var(--engraved-ledger) left top / 96px 32px repeat;
-  animation: engrave-drift 60s linear infinite;
+  animation: engrave-drift 18s linear infinite;
 }
-#process .engraving-ledger { opacity: .13; }
+#process .engraving-ledger { opacity: .18; }
 #trust .engraving { opacity: .14; }
 #questions .engraving-ledger { mask-image: linear-gradient(90deg, #000, transparent 24%); }
 #contact .engraving { opacity: .15; }
@@ -363,7 +381,7 @@ code { font-family: var(--mono); font-size: 10px; color: var(--muted); overflow-
 #contact .engraving-mark::before { background-image: var(--engraved-rings-light); animation-direction: reverse; opacity: .55; }
 #contact .engraving-mark::after { background-image: var(--engraved-mark-light); }
 @keyframes engrave-turn { to { transform: rotate(1turn); } }
-@keyframes engrave-float { from { transform: translateY(-6px); } to { transform: translateY(6px); } }
+@keyframes engrave-float { from { transform: translateY(-22px) rotate(-2deg); } to { transform: translateY(22px) rotate(2deg); } }
 @keyframes engrave-drift { to { transform: translate(96px, 32px); } }
 /* Small registration corners sit inside the existing panel padding. */
 .hero-visual, .specimen, .pair-grid .lane-card, .lane-grid .lane-card { position: relative; }
@@ -422,21 +440,21 @@ code { font-family: var(--mono); font-size: 10px; color: var(--muted); overflow-
 .doc-script .lh { align-self: center; font: 500 9.5px/1.4 var(--mono); color: var(--green); background: #eef4f0; border: 1px solid #d5e3da; border-radius: 3px; padding: 1px 5px; }
 .seal.seal-live { width: 72px; height: 72px; border: 0; display: grid; place-items: center; }
 .seal.seal-live svg { grid-area: 1 / 1; }
-.seal.seal-live .seal-ring { width: 72px; height: 72px; animation: engrave-turn 48s linear infinite; }
+.seal.seal-live .seal-ring { width: 72px; height: 72px; animation: engrave-turn 14s linear infinite; }
 .seal.seal-live .seal-mark { width: 30px; height: 30px; }
 .seal-note { display: block; margin-top: 2px; font-size: 11px; color: var(--muted); }
 .chip-dot { position: relative; }
-.chip-dot::after { content: ""; position: absolute; inset: -3px; border-radius: 50%; border: 1px solid var(--green); opacity: 0; animation: rec-pulse 2.8s ease-out 3.2s infinite; }
-.doc-script li { animation: rec-line .55s cubic-bezier(.2, .7, .2, 1) both; animation-delay: calc(.35s + var(--i) * .28s); }
-.doc-script .redact { transform-origin: left center; animation: rec-redact .45s ease-out both; animation-delay: calc(.6s + var(--i) * .28s); }
-.doc-script .lh { animation: rec-hash .6s ease-out both; animation-delay: calc(1.5s + var(--i) * .16s); }
-.seal.seal-live { animation: rec-seal .8s cubic-bezier(.2, .9, .25, 1.15) both; animation-delay: 2.3s; }
-.doc-script::after { content: ""; position: absolute; left: 0; right: 0; top: -32px; height: 32px; background: linear-gradient(rgb(46 94 78 / 0%), rgb(46 94 78 / 6%)); border-bottom: 1px solid rgb(46 94 78 / 35%); opacity: 0; pointer-events: none; animation: rec-sweep 9s ease-in-out 3.4s infinite; }
-@keyframes rec-line { from { opacity: 0; transform: translateY(6px); } }
+.chip-dot::after { content: ""; position: absolute; inset: -3px; border-radius: 50%; border: 1px solid var(--green); opacity: 0; animation: rec-pulse 1.8s ease-out 3.2s infinite; }
+.doc-script li { animation: rec-line .8s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(.35s + var(--i) * .4s); }
+.doc-script .redact { transform-origin: left center; animation: rec-redact .6s ease-out both; animation-delay: calc(.7s + var(--i) * .4s); }
+.doc-script .lh { animation: rec-hash .9s ease-out both; animation-delay: calc(2s + var(--i) * .22s); }
+.seal.seal-live { animation: rec-seal 1s cubic-bezier(.2, .9, .25, 1.3) both; animation-delay: 3s; }
+.doc-script::after { content: ""; position: absolute; left: 0; right: 0; top: -32px; height: 32px; background: linear-gradient(rgb(46 94 78 / 0%), rgb(46 94 78 / 16%)); border-bottom: 2px solid rgb(46 94 78 / 60%); opacity: 0; pointer-events: none; animation: rec-sweep 5.5s ease-in-out 4s infinite; }
+@keyframes rec-line { from { opacity: 0; transform: translateX(-28px); } }
 @keyframes rec-redact { from { transform: scaleX(0); } }
 @keyframes rec-hash { from { opacity: 0; color: white; background: var(--green); } 45% { opacity: 1; color: white; background: var(--green); } }
-@keyframes rec-seal { from { opacity: 0; transform: scale(1.35) rotate(-12deg); } }
-@keyframes rec-pulse { 0% { opacity: .6; transform: scale(.6); } 70%, 100% { opacity: 0; transform: scale(1.9); } }
+@keyframes rec-seal { from { opacity: 0; transform: scale(2.2) rotate(-45deg); } 70% { opacity: 1; transform: scale(.92) rotate(4deg); } }
+@keyframes rec-pulse { 0% { opacity: .9; transform: scale(.6); } 70%, 100% { opacity: 0; transform: scale(2.8); } }
 @keyframes rec-sweep { 0% { top: -32px; opacity: 0; } 4% { opacity: 1; } 30% { top: 100%; opacity: 1; } 34%, 100% { top: 100%; opacity: 0; } }
 @media (max-width: 600px) {
   .doc-script { padding: 20px 16px 16px; gap: 12px; }
